@@ -1,0 +1,208 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assert\Add.svg" />
+    <None Remove="Assert\Aplication_Exit.svg" />
+    <None Remove="Assert\Asp.jpg" />
+    <None Remove="Assert\Calendar_Month.svg" />
+    <None Remove="Assert\Copy.svg" />
+    <None Remove="Assert\Delete.svg" />
+    <None Remove="Assert\Enjoin MES-Arrow drop down.svg" />
+    <None Remove="Assert\Exit.svg" />
+    <None Remove="Assert\Logo.svg" />
+    <None Remove="Assert\Paste.svg" />
+    <None Remove="Assert\Print.svg" />
+    <None Remove="Assert\Refresh.svg" />
+    <None Remove="Assert\SideMenu_Close.svg" />
+    <None Remove="Assert\SideMenu_Logo_Trikala.svg" />
+    <None Remove="Assert\SideMenu_Material.svg" />
+    <None Remove="Assert\SideMenu_Menu.svg" />
+    <None Remove="Assert\SideMenu_Order.svg" />
+    <None Remove="Assert\SideMenu_OverView.svg" />
+    <None Remove="Assert\SideMenu_Recipe.svg" />
+    <None Remove="Assert\TrikalaLogo.png" />
+    <None Remove="Assert\TrikalaLogo.svg" />
+    <None Remove="Assert\TrikalaName.svg" />
+    <None Remove="Assert\Trikala_Name.png" />
+    <None Remove="Assert\User.svg" />
+    <None Remove="Filled_Icon\EnjoinMES_FldConfiguration.svg" />
+    <None Remove="Filled_Icon\EnjoinMES_FldMaterial.svg" />
+    <None Remove="Filled_Icon\EnjoinMES_FldOrder.svg" />
+    <None Remove="Filled_Icon\EnjoinMES_FldOverView.svg" />
+    <None Remove="Filled_Icon\EnjoinMES_FldPlantDecription.svg" />
+    <None Remove="Filled_Icon\EnjoinMES_FldRecipe.svg" />
+    <None Remove="Filled_Icon\EnjoinMES_FldReport.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldConfiguration.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldExit.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldMaterial.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldMenuClose.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldMenuOpen.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldOrder.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldOverView.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldPlantDecription.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldRecipe.svg" />
+    <None Remove="UnFilled_Icon\EnjoinMES_UnFldReport.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.2" />
+    <PackageReference Include="SharpVectors" Version="1.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assert\Add.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Aplication_Exit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Asp.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Calendar_Month.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Copy.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Delete.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Enjoin MES-Arrow drop down.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Exit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Logo.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Paste.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Print.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\Refresh.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_Close.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_Logo_Trikala.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_Material.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_Menu.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_Order.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_OverView.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_Plant_Decription.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_Recipe.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\SideMenu_User_Administration.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\TrikalaName.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assert\User.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Filled_Icon\EnjoinMES_FldConfiguration.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Filled_Icon\EnjoinMES_FldMaterial.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Filled_Icon\EnjoinMES_FldOrder.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Filled_Icon\EnjoinMES_FldOverView.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Filled_Icon\EnjoinMES_FldPlantDecription.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Filled_Icon\EnjoinMES_FldRecipe.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Filled_Icon\EnjoinMES_FldReport.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldConfiguration.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldExit.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldMaterial.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldMenuClose.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldMenuOpen.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldOrder.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldOverView.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldPlantDecription.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldRecipe.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UnFilled_Icon\EnjoinMES_UnFldReport.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Modules\OverView\Model\" />
+    <Folder Include="Modules\OverView\Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MES.ApplicationLayer\MES.ApplicationLayer.csproj" />
+    <ProjectReference Include="..\MES.Infrastructure\MES.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

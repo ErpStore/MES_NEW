@@ -1,0 +1,100 @@
+﻿<Window x:Class="MES.Presentation.UI.Modules.Materials.Views.MaterialManagementEditView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding WindowTitle}"
+        Height="450" Width="600"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+
+    <Border Background="{StaticResource LightWhiteBrush}" BorderBrush="#001C3B" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Background="#001C3B">
+                <TextBlock Text="{Binding WindowTitle}" Foreground="White" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="SemiBold"/>
+                <Button Command="{Binding CancelCommand}" Content="✕" Foreground="White" Background="Transparent" BorderThickness="0" HorizontalAlignment="Right" Width="30" FontWeight="Bold" Cursor="Hand"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="20,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Run Text="★" Foreground="#001C3B" FontSize="10" BaselineAlignment="Top"/><Run Text=" Material Code"/>
+                </TextBlock>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MaterialCode, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Run Text="★" Foreground="#001C3B" FontSize="10" BaselineAlignment="Top"/><Run Text=" Name"/>
+                </TextBlock>
+                <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Run Text="★" Foreground="#001C3B" FontSize="10" BaselineAlignment="Top"/><Run Text=" Material Group"/>
+                </TextBlock>
+
+                <ComboBox Grid.Row="1" Grid.Column="1" Height="25" 
+                          VerticalContentAlignment="Center"
+                          Foreground="Black" 
+                          Background="White"
+                          ItemsSource="{Binding MaterialGroups}"
+                          DisplayMemberPath="MaterialName"
+                          SelectedItem="{Binding SelectedGroup}">
+
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Background" Value="White"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+
+                </ComboBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Run Text="★" Foreground="#001C3B" FontSize="10" BaselineAlignment="Top"/><Run Text=" Unit"/>
+                </TextBlock>
+                <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Handling Info" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HandlingInfo, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="3" Text="Density" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Density, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Manufacturer" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Manufacturer, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="3" Text="Min Level" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding MinLevel, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Shelf Life (Days)" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ShelfLifeDays, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <CheckBox Grid.Row="4" Grid.Column="4" Content="Is Blocked" IsChecked="{Binding IsBlocked}" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="Red"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Description" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,10,0"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Height="50" VerticalContentAlignment="Top" TextWrapping="Wrap" AcceptsReturn="True"/>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,0,20,10">
+                <Button Content="Accept" Command="{Binding SaveCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="80" Height="25" Background="#001C3B" Foreground="White" BorderThickness="0" FontWeight="SemiBold" Cursor="Hand"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

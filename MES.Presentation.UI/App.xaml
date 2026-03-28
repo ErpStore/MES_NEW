@@ -1,0 +1,230 @@
+﻿<Application x:Class="MES.Presentation.UI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MES.Presentation.UI"
+             xmlns:conv="clr-namespace:MES.Presentation.UI.Converters" 
+             xmlns:vm="clr-namespace:MES.Presentation.UI.Modules.UserManagement.ViewModels"
+             xmlns:vmMaterials="clr-namespace:MES.Presentation.UI.Modules.Materials.ViewModel"
+             xmlns:views="clr-namespace:MES.Presentation.UI.Modules.UserManagement.Views"
+             xmlns:viewsMaterial="clr-namespace:MES.Presentation.UI.Modules.Materials.Views">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resource/DataTemplateDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <conv:ActiveMenuConverter x:Key="ActiveMenuConverter"/>
+        <conv:BoolToMenuStateConverter x:Key="BoolToMenuStateConverter"/>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+
+        <Color x:Key="PrimaryBrandColor">#001C3B</Color>
+        <Color x:Key="LightWhiteColor">#EFEFEF</Color>
+        <Color x:Key="SelectionOrangeColor">#FFCC00</Color>
+        <Color x:Key="HeaderBlue">#001C3B</Color>
+        <Color x:Key="RowHover">#F2F2F2</Color>
+
+        <SolidColorBrush x:Key="PrimaryBrandBrush" Color="{StaticResource PrimaryBrandColor}" />
+        <SolidColorBrush x:Key="LightWhiteBrush" Color="{StaticResource LightWhiteColor}" />
+        <SolidColorBrush x:Key="SelectionOrangeBrush" Color="{StaticResource SelectionOrangeColor}" />
+        <SolidColorBrush x:Key="HeaderBlueBrush" Color="{StaticResource HeaderBlue}"/>
+        <SolidColorBrush x:Key="RowHoverBrush" Color="{StaticResource RowHover}"/>
+        <SolidColorBrush x:Key="GridTextBrush" Color="Black"/>
+
+        <DataTemplate DataType="{x:Type vm:UsersViewModel}">
+            <views:UserView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:UserListDepartmentsViewModel}">
+            <views:UserDepartmentsView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:UsersListViewModel}">
+            <views:UsersListView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:UserGroupEditViewModel}">
+            <views:UserGroupEditView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmMaterials:MaterialsViewModel}">
+            <viewsMaterial:MaterialsView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmMaterials:MaterialGroupListViewModel}">
+            <viewsMaterial:MaterialGroupListView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmMaterials:MaterialManagementListViewModel}">
+            <viewsMaterial:MaterialManagementListView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmMaterials:FeedingPathListViewModel}">
+            <viewsMaterial:FeedingPathListView />
+        </DataTemplate>
+
+        <Style x:Key="IndustrialCellStyle" TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="IsEditing" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFC107"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="IndustrialDataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="RowBackground" Value="#F5F5F5"/>
+            <Setter Property="AlternatingRowBackground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="GridLinesVisibility" Value="Vertical"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#DDDDDD"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="RowHeight" Value="35"/>
+
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#001C3B"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="BorderBrush" Value="#555"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="CellStyle" Value="{StaticResource IndustrialCellStyle}"/>
+        </Style>
+
+        <Style x:Key="SearchTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            SnapsToDevicePixels="True">
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                            </Border>
+
+                            <TextBlock x:Name="placeholder"
+                               Text="Search..."
+                               Foreground="DarkGray"
+                               IsHitTestVisible="False"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Visibility="Collapsed"
+                               FontStyle="Italic"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
+                                <Setter TargetName="placeholder" Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FFCC00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TransparentIconButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#15000000"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#30000000"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="PopUpLabelStyle">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Foreground" Value="#001C3B"/>
+        </Style>
+
+        <Style TargetType="TextBox" x:Key="PopUpTextBoxStyle">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4,0,0,0"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+        </Style>
+
+        <Style TargetType="ComboBox" x:Key="PopUpComboBoxStyle">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4,0,0,0"/>
+            <Setter Property="Height" Value="26"/>
+        </Style>
+
+        <Style TargetType="PasswordBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4,0,0,0"/>
+            <Setter Property="Height" Value="26"/>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="26"/>
+        </Style>
+
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>

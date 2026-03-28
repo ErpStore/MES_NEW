@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="MES.Presentation.UI.Controls.SideMenuView.SideMenuItem"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:MES.Presentation.UI.Controls.SideMenuView"
+            xmlns:behaviors="clr-namespace:MES.Presentation.UI.Behaviors" xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             mc:Ignorable="d" 
+            d:DesignHeight="50" d:DesignWidth="50">
+   <UserControl.Resources>
+       <!-- Animation -->
+       <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+   </UserControl.Resources>
+   <Border x:Name="Root"
+           Padding="12"
+           Background="Transparent"
+           Cursor="Hand"
+           MouseLeftButtonUp="OnClick"
+           HorizontalAlignment="Left">
+
+       <StackPanel Orientation="Horizontal">
+           <!-- ICON (SVG placeholder) -->
+            <svgc:SvgViewbox 
+                  Width="20"
+                  Height="20"
+                  Source="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                  HorizontalAlignment="Center"/>
+
+            <!-- TEXT -->
+           <TextBlock Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      Margin="15,0,0,0"
+                      Foreground="White"
+                      Visibility="{Binding IsExpanded,
+                          RelativeSource={RelativeSource AncestorType=UserControl},
+                          Converter={StaticResource BoolToVisibility}}" />
+       </StackPanel>
+   </Border>
+
+   <!-- ACTIVE MENU HIGHLIGHT -->
+   <UserControl.Style>
+       <Style TargetType="UserControl">
+           <Style.Triggers>
+               <DataTrigger Binding="{Binding IsActive,
+                   RelativeSource={RelativeSource Self}}"
+                            Value="True">
+                   <Setter Property="Background"
+                           Value="#1E88E5"/>
+               </DataTrigger>
+           </Style.Triggers>
+       </Style>
+   </UserControl.Style>
+</UserControl>

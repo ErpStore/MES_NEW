@@ -1,0 +1,71 @@
+﻿<Window x:Class="MES.Presentation.UI.Modules.Materials.Views.MaterialGroupEditView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        
+        Title="{Binding WindowTitle}"
+        Height="200" Width="400"
+        
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" 
+        ResizeMode="NoResize"
+        AllowsTransparency="True" 
+        Background="Transparent">
+
+    <Border Background="{StaticResource LightWhiteBrush}" BorderBrush="{StaticResource PrimaryBrandBrush}" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Background="{StaticResource PrimaryBrandBrush}">
+                <TextBlock Text="{Binding WindowTitle}" 
+                           Foreground="White" 
+                           VerticalAlignment="Center" 
+                           Margin="10,0,0,0" 
+                           FontWeight="SemiBold"/>
+
+                <Button Command="{Binding CancelCommand}"
+                        Content="✕" 
+                        Foreground="White" 
+                        Background="{StaticResource PrimaryBrandBrush}" 
+                        BorderThickness="0"
+                        HorizontalAlignment="Right"
+                        Width="30" FontWeight="Bold"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="20,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Run Text="★" Foreground="{StaticResource PrimaryBrandBrush}" FontSize="10" BaselineAlignment="Top"/>
+                    <Run Text="Group Name"/>
+                </TextBlock>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Description" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center"/>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,0,20,10">
+                <Button Content="Accept" 
+                        Command="{Binding SaveCommand}"
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Bottom"
+                        Width="80" Height="25"
+                        Background="{StaticResource PrimaryBrandBrush}" 
+                        Foreground="White" 
+                        BorderThickness="0"
+                        FontWeight="SemiBold"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

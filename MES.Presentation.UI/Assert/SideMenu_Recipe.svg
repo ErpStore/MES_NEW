@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="48px"
+   viewBox="0 -960 960 960"
+   width="48px"
+   fill="#1f1f1f"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="Settings Input Component.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="17.104167"
+     inkscape:cx="24.11693"
+     inkscape:cy="24"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     d="M123-40v-170q-34-13-58.5-42.5T40-317v-398h83v-175q0-14 8-22t22-8q14 0 22 8t8 22v175h83v398q0 35-24 64.5T183-210v170h-60Zm327 0v-170q-34-13-58.5-42.5T367-317v-398h83v-175q0-14 8-22t22-8q14 0 22 8t8 22v175h83v398q0 35-24 64.5T510-210v170h-60Zm327 0v-170q-34-13-58.5-42.5T694-317v-398h83v-175q0-14 8-22t22-8q14 0 22 8t8 22v175h83v398q0 35-24.5 64.5T837-210v170h-60ZM100-655v184h106v-184H100Zm327 0v184h106v-184H427Zm327 0v184h106v-184H754ZM153-267q22 0 37.5-15t15.5-35v-94H100v94q0 20 15.5 35t37.5 15Zm327 0q22 0 37.5-15t15.5-35v-94H427v94q0 20 15.5 35t37.5 15Zm327 0q22 0 37.5-15t15.5-35v-94H754v94q0 20 15.5 35t37.5 15ZM153-441Zm327 0Zm327 0Z"
+     id="path1"
+     style="fill:#efefef;fill-opacity:1;stroke:#efefef;stroke-opacity:1" />
+</svg>

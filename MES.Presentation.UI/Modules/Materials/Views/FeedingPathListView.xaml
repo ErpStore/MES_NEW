@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="MES.Presentation.UI.Modules.Materials.Views.FeedingPathListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MES.Presentation.UI.Modules.Materials.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="White">
+        <DataGrid ItemsSource="{Binding Items}" 
+                  SelectedItem="{Binding SelectedItem}"
+                  Style="{StaticResource IndustrialDataGridStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding BinNumber}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <TextBlock><Run Text="★" FontSize="10" BaselineAlignment="Top"/>Bin Number</TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding BinCode}" Width="120">
+                    <DataGridTextColumn.Header>
+                        <TextBlock><Run Text="★" FontSize="10" BaselineAlignment="Top"/>Bin Code</TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding MaterialCode}" Width="150">
+                    <DataGridTextColumn.Header>
+                        <TextBlock><Run Text="★" FontSize="10" BaselineAlignment="Top"/>Material Code</TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding MaxCapacity, StringFormat=\{0:F1\}}" Width="130">
+                    <DataGridTextColumn.Header>
+                        <TextBlock><Run Text="★" FontSize="10" BaselineAlignment="Top"/>Max Capacity (kg)</TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding CurrentStock, StringFormat=\{0:F1\}}" Width="130">
+                    <DataGridTextColumn.Header>
+                        <TextBlock><Run Text="★" FontSize="10" BaselineAlignment="Top"/>Current Stock (kg)</TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Filled Date" Binding="{Binding FilledDate, StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Width="160"/>
+
+                <DataGridTextColumn Header="Expiry Date" Binding="{Binding ExpiryDate, StringFormat=\{0:yyyy-MM-dd HH:mm:ss\}}" Width="160"/>
+
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

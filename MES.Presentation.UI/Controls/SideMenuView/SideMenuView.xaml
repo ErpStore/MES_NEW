@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="MES.Presentation.UI.Controls.SideMenuView.SideMenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sidemenuview="clr-namespace:MES.Presentation.UI.Controls.SideMenuView"
+             xmlns:conv="clr-namespace:MES.Presentation.UI.Converters"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" 
+             xmlns:nav="clr-namespace:MES.Presentation.UI.Navigation"
+             mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="60">
+
+    <UserControl.Resources>
+        <conv:ActiveMenuConverter x:Key="ActiveMenuConverter"/>
+        <conv:BoolToMenuStateConverter x:Key="BoolToMenuStateConverter"/>
+    </UserControl.Resources>
+
+    <Border x:Name="SideBar"
+            Width="{Binding MenuWidth}"
+            VerticalAlignment="Stretch" 
+            Background="{StaticResource PrimaryBrandBrush}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Hidden">
+                <StackPanel>
+                    <Button Width="40" Height="40" BorderThickness="0"
+                            Background="Transparent" HorizontalAlignment="Left"
+                            Command="{Binding ToggleMenuCommand}">
+                        <svgc:SvgViewbox Width="20" Height="20" Source="Assert/SideMenu_Menu.svg" />
+                    </Button>
+                    
+                    <sidemenuview:SideMenuItem Icon="Assert/SideMenu_OverView.svg" Text="Overview" Margin="0,30,0,0"
+                        Command="{Binding NavigateCommand}" CommandParameter="Overview"
+                        IsActive="{Binding ActiveMenu, ConverterParameter=Overview, Converter={StaticResource ActiveMenuConverter}}" IsExpanded="{Binding IsExpanded}"/>
+
+                    <sidemenuview:SideMenuItem Icon="Assert/SideMenu_User_Administration.svg" Text="User Administration"
+                        Command="{Binding NavigateCommand}" CommandParameter="{x:Static nav:AppPage.Users}"
+                        IsActive="{Binding ActivePage, Converter={StaticResource ActiveMenuConverter}, ConverterParameter={x:Static nav:AppPage.Users}}" IsExpanded="{Binding IsExpanded}"/>
+
+                    <sidemenuview:SideMenuItem Icon="Assert/SideMenu_Material.svg" Text="Material"
+                        Command="{Binding NavigateCommand}" CommandParameter="{x:Static nav:AppPage.Material}"
+                        IsActive="{Binding ActiveMenu, ConverterParameter={x:Static nav:AppPage.Material}, Converter={StaticResource ActiveMenuConverter}}" IsExpanded="{Binding IsExpanded}"/>
+
+                    <sidemenuview:SideMenuItem Icon="Assert/SideMenu_Recipe.svg" Text="Recipe"
+                        Command="{Binding NavigateCommand}" CommandParameter="{x:Static nav:AppPage.Recipe}"
+                        IsActive="{Binding ActiveMenu, ConverterParameter={x:Static nav:AppPage.Recipe}, Converter={StaticResource ActiveMenuConverter}}" IsExpanded="{Binding IsExpanded}"/>
+
+                    <sidemenuview:SideMenuItem Icon="Assert/SideMenu_Order.svg" Text="Order"
+                        Command="{Binding NavigateCommand}" CommandParameter="{x:Static nav:AppPage.Orders}"
+                        IsActive="{Binding ActiveMenu, ConverterParameter={x:Static nav:AppPage.Orders}, Converter={StaticResource ActiveMenuConverter}}" IsExpanded="{Binding IsExpanded}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="1" Margin="0,0,0,15">
+
+                <sidemenuview:SideMenuItem Icon="Assert/Aplication_Exit.svg" Text="Exit"
+                    Command="{Binding ExitCommand}" IsExpanded="{Binding IsExpanded}"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,10">
+                    <Ellipse Width="6" Height="6" Fill="#00FF00" Margin="3"/>
+                    <Ellipse Width="6" Height="6" Fill="#00FF00" Margin="3"/>
+                    <Ellipse Width="6" Height="6" Fill="#00FF00" Margin="3"/>
+                </StackPanel>
+
+                <Button Background="Transparent" BorderThickness="0" 
+                        HorizontalAlignment="Center" Cursor="Hand" Margin="0,0,0,5"
+                        Command="{Binding ShowAboutCommand}">
+                    <Viewbox Width="32" Height="32">
+                        <Path Fill="White" Stretch="Uniform">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <PathGeometry Figures="M 47,10 A 40,40 0 0 0 10,47 L 18,47 A 32,32 0 0 1 47,18 Z" />
+                                    <PathGeometry Figures="M 53,10 A 40,40 0 0 1 90,47 L 82,47 A 32,32 0 0 0 53,18 Z" />
+                                    <PathGeometry Figures="M 10,53 A 40,40 0 0 0 47,90 L 47,82 A 32,32 0 0 1 18,53 Z" />
+                                    <PathGeometry Figures="M 90,53 A 40,40 0 0 1 53,90 L 53,82 A 32,32 0 0 0 82,53 Z" />
+                                    <PathGeometry Figures="M 36,25 H 48 V 75 H 44 V 33 H 36 Z" />
+                                    <PathGeometry Figures="M 52,25 H 64 V 33 H 56 V 75 H 52 Z" />
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                    </Viewbox>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</UserControl>

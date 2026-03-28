@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100" height="100" viewBox="0 0 100 100">
+	<g fill="#001C3B">
+		<path d="M47,10A40,40,0,0,0,10,47H18A32,32,0,0,1,47,18Z"/>
+		<path d="M53,10A40,40,0,0,1,90,47H82A32,32,0,0,0,53,18Z"/>
+		<path d="M10,53A40,40,0,0,0,47,90V82A32,32,0,0,1,18,53Z"/>
+		<path d="M90,53A40,40,0,0,1,53,90V82A32,32,0,0,0,82,53Z"/>
+		<path d="M36,25H48V75H44V33H36Z"/>
+		<path d="M52,25H64V33H56V75H52Z"/>
+	</g>
+</svg>
