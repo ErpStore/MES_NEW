@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:recipe="clr-namespace:MES.Presentation.UI.Modules.Recipe" 
+                    xmlns:recipe1="clr-namespace:MES.Presentation.UI.Modules.Recipe.Views" xmlns:recipe2="clr-namespace:MES.Presentation.UI.Modules.Recipe.ViewModel" 
+                    xmlns:viewmodel="clr-namespace:MES.Presentation.UI.Modules.Order.ViewModel" 
+                    xmlns:Order="clr-namespace:MES.Presentation.UI.Modules.Order.Views">
+    <DataTemplate DataType="{x:Type recipe:RecipeListViewModel}">
+        <recipe1:RecipeListView />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type recipe2:RecipeProcessListViewModel}">
+        <recipe1:RecipeProcessListView />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type recipe2:RecipesViewModel}">
+        <recipe1:RecipesView />
+    </DataTemplate>
+
+    
+    <DataTemplate DataType="{x:Type viewmodel:OrderManagementViewModel}">
+        <Order:OrdersView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:OrderManagementListViewModel}">
+        <Order:OrderManagementListView />
+    </DataTemplate>
+</ResourceDictionary>
