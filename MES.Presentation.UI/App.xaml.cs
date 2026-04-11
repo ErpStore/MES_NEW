@@ -37,16 +37,16 @@ namespace MES.Presentation.UI
                 var dialogService = _serviceProvider.GetRequiredService<IDialogService>();
                 var loginResult = dialogService.ShowDialog(loginVm);
 
-                if (loginResult != true)
-                {
-                    // User closed login without logging in – exit application
-                    Shutdown();
-                    return;
-                }
+                //if (loginResult != true)
+                //{
+                //    // User closed login without logging in – exit application
+                //    Shutdown();
+                //    return;
+                //}
 
                 // Update the header bar with logged-in user name
-                var headerVm = _serviceProvider.GetRequiredService<HeaderBarViewModel>();
-                headerVm.UpdateUserName();
+                //var headerVm = _serviceProvider.GetRequiredService<HeaderBarViewModel>();
+                //headerVm.UpdateUserName();
 
                 var mainWindow = new MainWindowView
                 {

@@ -96,7 +96,10 @@ namespace MES.Presentation.UI.Bootstrapper
             DialogService.RegisterDialog<OrderManagementEditViewModel, OrderManagementEditView>();
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SaveUserHandler).Assembly));
-            services.AddDbContext<MesDbContext>(options => options.UseSqlServer(ConnectionString));
+            services.AddDbContext<MesDbContext>(options =>
+            {
+                options.UseSqlServer(ConnectionString);
+            }, ServiceLifetime.Transient);
             return services;
         }
     }
