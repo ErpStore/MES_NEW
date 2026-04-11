@@ -68,8 +68,16 @@ namespace MES.Presentation.UI.Service
 
                 // 2. Configure the Window
                 window.DataContext = viewModel;
-                window.Owner = Application.Current.MainWindow;
-                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                var mainWindow = Application.Current.MainWindow;
+                if (mainWindow != null && mainWindow != window)
+                {
+                    window.Owner = mainWindow;
+                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                }
+                else
+                {
+                    window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
 
                 // We check if the ViewModel implements our Interface
                 if (viewModel is IModalViewModel modalVm)

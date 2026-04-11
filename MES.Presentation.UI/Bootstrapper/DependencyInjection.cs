@@ -52,6 +52,7 @@ namespace MES.Presentation.UI.Bootstrapper
             services.AddSingleton<IDialogService, DialogService>();
 
             // 2. Register ViewModels (Transient = New one every time)
+            services.AddTransient<UsersViewModel>();
             services.AddTransient<UsersListViewModel>();
             services.AddTransient<UserEditViewModel>();
             services.AddTransient<UserListDepartmentsViewModel>();
@@ -60,6 +61,7 @@ namespace MES.Presentation.UI.Bootstrapper
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MaterialGroupListViewModel>();
             services.AddTransient<MaterialManagementListViewModel>();
+            services.AddTransient<MaterialsViewModel>();
             services.AddTransient<MaterialManagementEditViewModel>();
             services.AddTransient<MaterialManagementEditView>();
             services.AddTransient<MaterialGroupEditViewModel>();
