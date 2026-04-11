@@ -4,6 +4,7 @@ using MediatR;
 using MES.ApplicationLayer.User.Dtos;
 using MES.ApplicationLayer.User.Quires;
 using MES.Presentation.UI.Common;
+using MES.Presentation.UI.Navigation;
 using MES.Presentation.UI.Service;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
     {
         private readonly IMediator _mediator;
         private readonly ICurrentUserService _currentUserService;
+        private readonly INavigationService _navigationService;
         private readonly ILogger<LoginViewModel>? _logger;
 
         // ========================
@@ -39,10 +41,11 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
         // ========================
         // CONSTRUCTOR
         // ========================
-        public LoginViewModel(IMediator mediator, ICurrentUserService currentUserService, ILogger<LoginViewModel>? logger = null)
+        public LoginViewModel(IMediator mediator, ICurrentUserService currentUserService, INavigationService navigationService, ILogger<LoginViewModel>? logger = null)
         {
             _mediator = mediator;
             _currentUserService = currentUserService;
+            _navigationService = navigationService;
             _logger = logger;
         }
 
@@ -98,6 +101,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
                 {
                     _currentUserService.Login(result.User, result.Rights);
                     _logger?.LogInformation("User {UserName} logged in.", result.User.UserName);
+                    _navigationService.Navigate(AppPage.Users);
                     CloseAction?.Invoke(true);
                 }
                 else
