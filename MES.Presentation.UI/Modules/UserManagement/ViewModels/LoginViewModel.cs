@@ -101,7 +101,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
                 {
                     _currentUserService.Login(result.User, result.Rights);
                     _logger?.LogInformation("User {UserName} logged in.", result.User.UserName);
-                    _navigationService.Navigate(AppPage.Users);
+                    //_navigationService.Navigate(AppPage.Users);
                     CloseAction?.Invoke(true);
                 }
                 else

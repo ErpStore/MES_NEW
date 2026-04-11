@@ -1,6 +1,7 @@
 ﻿using MES.Presentation.UI.Bootstrapper;
 using MES.Presentation.UI.Controls;
 using MES.Presentation.UI.Modules.UserManagement.ViewModels;
+using MES.Presentation.UI.Navigation;
 using MES.Presentation.UI.Service;
 using MES.Presentation.UI.Shell;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,9 @@ namespace MES.Presentation.UI
         {
             base.OnStartup(e);
 
+            // Set shutdown mode to explicit to prevent auto-shutdown
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
             try
             {
                 var services = new ServiceCollection();
@@ -37,22 +41,31 @@ namespace MES.Presentation.UI
                 var dialogService = _serviceProvider.GetRequiredService<IDialogService>();
                 var loginResult = dialogService.ShowDialog(loginVm);
 
-                //if (loginResult != true)
-                //{
-                //    // User closed login without logging in – exit application
-                //    Shutdown();
-                //    return;
-                //}
+                if (loginResult != true)
+                {
+                    // User closed login without logging in – exit application
+                    Shutdown();
+                    return;
+                }
 
-                // Update the header bar with logged-in user name
-                //var headerVm = _serviceProvider.GetRequiredService<HeaderBarViewModel>();
-                //headerVm.UpdateUserName();
+                // Create and configure main window
+                var mainWindowViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+                mainWindowViewModel.Initialize();
 
                 var mainWindow = new MainWindowView
                 {
-                    DataContext = _serviceProvider
-                        .GetRequiredService<MainWindowViewModel>()
+                    DataContext = mainWindowViewModel
                 };
+
+                // Set as application's main window BEFORE showing it
+                MainWindow = mainWindow;
+
+                // Navigate to Users page after setting main window
+                var shell = _serviceProvider.GetRequiredService<ShellViewModel>();
+                shell.NavigateTo(AppPage.Users);
+
+                // Change shutdown mode back to normal behavior
+                ShutdownMode = ShutdownMode.OnMainWindowClose;
 
                 mainWindow.Show();
             }
@@ -63,6 +76,8 @@ namespace MES.Presentation.UI
                 Shutdown(1);
             }
         }
+
+
     }
 
 }
