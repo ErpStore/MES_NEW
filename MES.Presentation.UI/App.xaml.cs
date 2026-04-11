@@ -21,38 +21,47 @@ namespace MES.Presentation.UI
         {
             base.OnStartup(e);
 
-            var services = new ServiceCollection();
-
-            // Your extension method
-            services.AddPresentationUI();
-
-            _serviceProvider = services.BuildServiceProvider();
-
-            // Show Login dialog before main window
-            var loginVm = _serviceProvider.GetRequiredService<LoginViewModel>();
-            await loginVm.InitializeAsync();
-
-            var dialogService = _serviceProvider.GetRequiredService<IDialogService>();
-            var loginResult = dialogService.ShowDialog(loginVm);
-
-            if (loginResult != true)
+            try
             {
-                // User closed login without logging in – exit application
-                Shutdown();
-                return;
+                var services = new ServiceCollection();
+
+                // Your extension method
+                services.AddPresentationUI();
+
+                _serviceProvider = services.BuildServiceProvider();
+
+                // Show Login dialog before main window
+                var loginVm = _serviceProvider.GetRequiredService<LoginViewModel>();
+                await loginVm.InitializeAsync();
+
+                var dialogService = _serviceProvider.GetRequiredService<IDialogService>();
+                var loginResult = dialogService.ShowDialog(loginVm);
+
+                if (loginResult != true)
+                {
+                    // User closed login without logging in – exit application
+                    Shutdown();
+                    return;
+                }
+
+                // Update the header bar with logged-in user name
+                var headerVm = _serviceProvider.GetRequiredService<HeaderBarViewModel>();
+                headerVm.UpdateUserName();
+
+                var mainWindow = new MainWindowView
+                {
+                    DataContext = _serviceProvider
+                        .GetRequiredService<MainWindowViewModel>()
+                };
+
+                mainWindow.Show();
             }
-
-            // Update the header bar with logged-in user name
-            var headerVm = _serviceProvider.GetRequiredService<HeaderBarViewModel>();
-            headerVm.UpdateUserName();
-
-            var mainWindow = new MainWindowView
+            catch (Exception ex)
             {
-                DataContext = _serviceProvider
-                    .GetRequiredService<MainWindowViewModel>()
-            };
-
-            mainWindow.Show();
+                MessageBox.Show($"Application startup failed: {ex.Message}", "Startup Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown(1);
+            }
         }
     }
 

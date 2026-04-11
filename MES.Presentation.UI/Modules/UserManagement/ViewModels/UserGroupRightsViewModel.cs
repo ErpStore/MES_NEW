@@ -179,11 +179,11 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
         private List<UserGroupRightDto> CollectLeafRights()
         {
             var result = new List<UserGroupRightDto>();
-            CollectFromNode(RightNodes, result);
+            CollectFromNode(RightNodes, _userGroupId, result);
             return result;
         }
 
-        private static void CollectFromNode(IEnumerable<ScreenRightNode> nodes, List<UserGroupRightDto> result)
+        private static void CollectFromNode(IEnumerable<ScreenRightNode> nodes, int userGroupId, List<UserGroupRightDto> result)
         {
             foreach (var node in nodes)
             {
@@ -191,7 +191,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
                 {
                     result.Add(new UserGroupRightDto
                     {
-                        UserGroupId = 0,
+                        UserGroupId = userGroupId,
                         ScreenKey = node.ScreenKey,
                         CanAdd = node.IsAssigned,
                         CanEdit = node.IsAssigned,
@@ -200,7 +200,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
                 }
                 else
                 {
-                    CollectFromNode(node.Children, result);
+                    CollectFromNode(node.Children, userGroupId, result);
                 }
             }
         }

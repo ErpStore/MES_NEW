@@ -66,11 +66,6 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
             }
         }
 
-        partial void OnSearchTextChanged(string value)
-        {
-            // Filter is handled in the view via binding to filtered list
-        }
-
         [RelayCommand]
         private async Task Login()
         {
