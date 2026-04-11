@@ -1,6 +1,7 @@
 ﻿using MES.Presentation.UI.Bootstrapper;
 using MES.Presentation.UI.Controls;
 using MES.Presentation.UI.Modules.UserManagement.ViewModels;
+using MES.Presentation.UI.Navigation;
 using MES.Presentation.UI.Service;
 using MES.Presentation.UI.Shell;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,6 +56,10 @@ namespace MES.Presentation.UI
                 };
 
                 mainWindow.Show();
+
+                // Navigate to User Management after successful login
+                var navigationService = _serviceProvider.GetRequiredService<INavigationService>();
+                navigationService.Navigate(AppPage.Users);
             }
             catch (Exception ex)
             {
