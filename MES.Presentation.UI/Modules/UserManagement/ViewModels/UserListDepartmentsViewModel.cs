@@ -40,6 +40,28 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
                 return;
             }
         }
+
+        [RelayCommand]
+        private async Task ManageRights(UserGroupDto? userGroupDto)
+        {
+            if (userGroupDto == null) return;
+
+            var vm = _viewModelFactory?.Create<UserGroupRightsViewModel>();
+            if (vm == null) return;
+
+            await vm.InitializeAsync(userGroupDto);
+
+            try
+            {
+                _logger?.LogInformation("Showing UserGroupRightsView for group {Name}.", userGroupDto.Name);
+                _dialogService?.ShowDialog(vm);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error opening User Group Rights.");
+                _dialogService?.ShowMessage("Could not open rights editor.", "Error");
+            }
+        }
         [RelayCommand]
         private async Task DeleteGroup(UserGroupDto userGroupDto)
         {

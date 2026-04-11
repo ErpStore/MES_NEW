@@ -28,7 +28,7 @@
                                     Binding="{Binding Description}" 
                                     Width="*"/>
 
-                <DataGridTemplateColumn Header="Actions" Width="80">
+                <DataGridTemplateColumn Header="Actions" Width="110">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -36,15 +36,22 @@
                                 <Button Command="{Binding DataContext.EditGroupCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}"
                                         ToolTip="Edit User Group"
-                                        Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,10,0">
+                                        Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,6,0">
                                     <TextBlock Text="✎" FontSize="16" Foreground="#001C3B" FontWeight="Bold"/>
+                                </Button>
+
+                                <Button Command="{Binding DataContext.ManageRightsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="Manage Rights"
+                                        Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,6,0">
+                                    <TextBlock Text="🔑" FontSize="14"/>
                                 </Button>
 
                                 <Button Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}"
                                         ToolTip="Delete User Group"
                                         Background="Transparent" BorderThickness="0" Cursor="Hand">
-                                                                        <TextBlock Text="🗑" FontSize="16" Foreground="#D32F2F"/>
+                                    <TextBlock Text="🗑" FontSize="16" Foreground="#D32F2F"/>
                                 </Button>
 
                             </StackPanel>

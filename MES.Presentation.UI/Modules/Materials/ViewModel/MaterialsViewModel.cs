@@ -21,27 +21,33 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
         private readonly IViewModelFactory? _viewModelFactory;
         private readonly IDialogService? _dialogService;
         private readonly IMediator? _mediator;
+        private readonly ICurrentUserService? _currentUserService;
 
         public ListHeaderBarViewModel<MaterialsTab>? Header { get; set; }
 
         [ObservableProperty]
         private BaseViewModel? _currentContentViewModel;
 
-        public MaterialsViewModel(IMediator mediator, IDialogService dialogService , IViewModelFactory viewModelFactory)
+        public MaterialsViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory,
+            ICurrentUserService? currentUserService = null)
         {
             _mediator = mediator;
             _viewModelFactory = viewModelFactory;
             _dialogService = dialogService;
+            _currentUserService = currentUserService;
         }
 
         public override async Task InitializeAsync()
         {
+            // Default tab is MaterialGroup – check its rights
+            var rights = _currentUserService?.GetRights(ScreenKeys.MaterialGroup);
+
             // Configure the Top Toolbar
             Header = new ListHeaderBarViewModel<MaterialsTab>
             {
-                CanAdd = true,
-                CanEdit = true,
-                CanDelete = true,
+                CanAdd = rights?.CanAdd ?? true,
+                CanEdit = rights?.CanEdit ?? true,
+                CanDelete = rights?.CanDelete ?? true,
                 CanRefresh = true,
 
                 // Broadcast Actions to Children
@@ -52,9 +58,9 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
             };
 
             // Add the 3 Tabs
-            Header.Tabs.Add(MaterialsTab.MaterialGroup);      // Image 1
-            Header.Tabs.Add(MaterialsTab.MaterialManagement); // Image 2
-            Header.Tabs.Add(MaterialsTab.FeedingPath);        // Image 3
+            Header.Tabs.Add(MaterialsTab.MaterialGroup);
+            Header.Tabs.Add(MaterialsTab.MaterialManagement);
+            Header.Tabs.Add(MaterialsTab.FeedingPath);
 
             Header.TabChangedRequested += OnTabChanged;
 
@@ -63,7 +69,26 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
             await LoadTabContent(MaterialsTab.MaterialGroup);
         }
 
-        private async void OnTabChanged(MaterialsTab tab) => await LoadTabContent(tab);
+        private async void OnTabChanged(MaterialsTab tab)
+        {
+            // Update toolbar rights when tab changes
+            if (Header != null && _currentUserService != null)
+            {
+                var screenKey = tab switch
+                {
+                    MaterialsTab.MaterialGroup => ScreenKeys.MaterialGroup,
+                    MaterialsTab.MaterialManagement => ScreenKeys.MaterialManagement,
+                    MaterialsTab.FeedingPath => ScreenKeys.FeedingPath,
+                    _ => ScreenKeys.MaterialGroup
+                };
+                var rights = _currentUserService.GetRights(screenKey);
+                Header.CanAdd = rights?.CanAdd ?? true;
+                Header.CanEdit = rights?.CanEdit ?? true;
+                Header.CanDelete = rights?.CanDelete ?? true;
+            }
+
+            await LoadTabContent(tab);
+        }
 
         private async Task LoadTabContent(MaterialsTab tab)
         {
@@ -75,17 +100,14 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
             switch (tab)
             {
                 case MaterialsTab.MaterialGroup:
-                    // We will build this one first
                     newVm = _viewModelFactory.Create<MaterialGroupListViewModel>();
                     break;
 
                 case MaterialsTab.MaterialManagement:
-                    // Placeholder for now
                     newVm = _viewModelFactory.Create<MaterialManagementListViewModel>();
                     break;
 
                 case MaterialsTab.FeedingPath:
-                    // Placeholder for now
                     newVm = _viewModelFactory.Create<FeedingPathListViewModel>();
                     break;
             }

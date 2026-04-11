@@ -20,15 +20,18 @@ namespace MES.Presentation.UI.Shell
         private readonly IDialogService _dialogService;
         private readonly IViewModelFactory _viewModelFactory;
         private readonly ILogger<ShellViewModel>? _logger;
+        private readonly ICurrentUserService _currentUserService;
 
         [ObservableProperty]
         private BaseViewModel? currentViewModel;
 
-        public ShellViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory)
+        public ShellViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory,
+            ICurrentUserService currentUserService)
         {
             _mediator = mediator;
             _dialogService = dialogService;
             _viewModelFactory = viewModelFactory;
+            _currentUserService = currentUserService;
 
             NavigateTo(AppPage.Recipe);
         }
@@ -38,10 +41,10 @@ namespace MES.Presentation.UI.Shell
             CurrentViewModel = page switch
             {
                 AppPage.Overview => new OverviewViewModel(),
-                AppPage.Users => new UsersViewModel(_mediator, _dialogService, _viewModelFactory),
-                AppPage.Material => new MaterialsViewModel(_mediator, _dialogService, _viewModelFactory),
-                AppPage.Recipe => new RecipesViewModel(_mediator, _dialogService, _viewModelFactory),
-                AppPage.Orders => new OrderManagementViewModel(_viewModelFactory),
+                AppPage.Users => new UsersViewModel(_mediator, _dialogService, _viewModelFactory, _currentUserService),
+                AppPage.Material => new MaterialsViewModel(_mediator, _dialogService, _viewModelFactory, _currentUserService),
+                AppPage.Recipe => new RecipesViewModel(_mediator, _dialogService, _viewModelFactory, _currentUserService),
+                AppPage.Orders => new OrderManagementViewModel(_viewModelFactory, _currentUserService),
 
                 _ => throw new NotSupportedException($"Page {page} not supported")
             };

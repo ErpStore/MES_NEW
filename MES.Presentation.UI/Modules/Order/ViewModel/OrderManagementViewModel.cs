@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using MES.Presentation.UI.Common;
 using MES.Presentation.UI.Controls.ListHeaderBar;
 using MES.Presentation.UI.Messages;
+using MES.Presentation.UI.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +17,29 @@ namespace MES.Presentation.UI.Modules.Order.ViewModel
     public partial class OrderManagementViewModel : BaseViewModel
     {
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly ICurrentUserService? _currentUserService;
 
         public ListHeaderBarViewModel<OrdersTab>? Header { get; set; }
 
         [ObservableProperty]
         private BaseViewModel? _currentContentViewModel;
 
-        public OrderManagementViewModel(IViewModelFactory viewModelFactory)
+        public OrderManagementViewModel(IViewModelFactory viewModelFactory,
+            ICurrentUserService? currentUserService = null)
         {
             _viewModelFactory = viewModelFactory;
+            _currentUserService = currentUserService;
         }
 
         public override async Task InitializeAsync()
         {
+            var rights = _currentUserService?.GetRights(ScreenKeys.OrderManagement);
+
             Header = new ListHeaderBarViewModel<OrdersTab>
             {
-                CanAdd = true,
-                CanEdit = true,
-                CanDelete = true,
+                CanAdd = rights?.CanAdd ?? true,
+                CanEdit = rights?.CanEdit ?? true,
+                CanDelete = rights?.CanDelete ?? true,
                 CanRefresh = true,
                 AddCommand = new RelayCommand(() => SendAction("Add")),
                 EditCommand = new RelayCommand(() => SendAction("Edit")),

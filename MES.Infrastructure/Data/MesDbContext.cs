@@ -13,6 +13,8 @@ namespace MES.Infrastructure.Data
 
         public DbSet<UserGroup> UserGroups { get; set; } // Add this
 
+        public DbSet<UserGroupRight> UserGroupRights { get; set; }
+
         public DbSet<MaterialGroup> MaterialGroups { get; set; }
 
         public DbSet<Material> Materials { get; set; }

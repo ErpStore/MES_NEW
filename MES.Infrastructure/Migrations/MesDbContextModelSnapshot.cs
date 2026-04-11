@@ -368,6 +368,38 @@ namespace MES.Infrastructure.Migrations
                     b.ToTable("UserGroups");
                 });
 
+            modelBuilder.Entity("MES.Domain.Entities.UserGroupRight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("CanAdd")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanEdit")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ScreenKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("UserGroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserGroupId");
+
+                    b.ToTable("UserGroupRights");
+                });
+
             modelBuilder.Entity("MES.Domain.Entities.Materials.FeedingPath", b =>
                 {
                     b.HasOne("MES.Domain.Entities.Materials.Material", "Material")
@@ -425,6 +457,17 @@ namespace MES.Infrastructure.Migrations
                     b.HasOne("MES.Domain.Entities.UserGroup", "UserGroup")
                         .WithMany("Users")
                         .HasForeignKey("UserGroupId");
+
+                    b.Navigation("UserGroup");
+                });
+
+            modelBuilder.Entity("MES.Domain.Entities.UserGroupRight", b =>
+                {
+                    b.HasOne("MES.Domain.Entities.UserGroup", "UserGroup")
+                        .WithMany()
+                        .HasForeignKey("UserGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserGroup");
                 });

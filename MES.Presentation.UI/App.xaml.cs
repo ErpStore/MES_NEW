@@ -1,4 +1,7 @@
 ﻿using MES.Presentation.UI.Bootstrapper;
+using MES.Presentation.UI.Controls;
+using MES.Presentation.UI.Modules.UserManagement.ViewModels;
+using MES.Presentation.UI.Service;
 using MES.Presentation.UI.Shell;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
@@ -14,7 +17,7 @@ namespace MES.Presentation.UI
     {
         private IServiceProvider? _serviceProvider;
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
@@ -25,6 +28,23 @@ namespace MES.Presentation.UI
 
             _serviceProvider = services.BuildServiceProvider();
 
+            // Show Login dialog before main window
+            var loginVm = _serviceProvider.GetRequiredService<LoginViewModel>();
+            await loginVm.InitializeAsync();
+
+            var dialogService = _serviceProvider.GetRequiredService<IDialogService>();
+            var loginResult = dialogService.ShowDialog(loginVm);
+
+            if (loginResult != true)
+            {
+                // User closed login without logging in – exit application
+                Shutdown();
+                return;
+            }
+
+            // Update the header bar with logged-in user name
+            var headerVm = _serviceProvider.GetRequiredService<HeaderBarViewModel>();
+            headerVm.UpdateUserName();
 
             var mainWindow = new MainWindowView
             {

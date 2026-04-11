@@ -14,50 +14,65 @@ namespace MES.Presentation.UI.Modules.Recipe.ViewModel
     public partial class RecipesViewModel : BaseViewModel
     {
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly ICurrentUserService? _currentUserService;
 
         public ListHeaderBarViewModel<RecipesTab>? Header { get; set; }
 
         [ObservableProperty]
         private BaseViewModel? _currentContentViewModel;
 
-        public RecipesViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory)
+        public RecipesViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory,
+            ICurrentUserService? currentUserService = null)
         {
             _viewModelFactory = viewModelFactory;
+            _currentUserService = currentUserService;
         }
 
         public override async Task InitializeAsync()
         {
+            var rights = _currentUserService?.GetRights(ScreenKeys.RecipeManagement);
+
             // Configure the Top Toolbar
             Header = new ListHeaderBarViewModel<RecipesTab>
             {
-                CanAdd = true,
-                CanEdit = true,
-                CanDelete = true,
+                CanAdd = rights?.CanAdd ?? true,
+                CanEdit = rights?.CanEdit ?? true,
+                CanDelete = rights?.CanDelete ?? true,
                 CanRefresh = true,
 
-                // Broadcast Actions to whichever child tab is currently active
                 AddCommand = new RelayCommand(() => SendAction("Add")),
                 EditCommand = new RelayCommand(() => SendAction("Edit")),
                 DeleteCommand = new RelayCommand(() => SendAction("Delete")),
                 RefreshCommand = new RelayCommand(() => SendAction("Refresh"))
             };
 
-            // Add the Tabs based on your screenshots
-            Header.Tabs.Add(RecipesTab.RecipeManagement); // Tab 1
-            Header.Tabs.Add(RecipesTab.RecipeProcess);    // Tab 2
+            Header.Tabs.Add(RecipesTab.RecipeManagement);
+            Header.Tabs.Add(RecipesTab.RecipeProcess);
 
             Header.TabChangedRequested += OnTabChanged;
 
-            // Load Default Tab
             Header.SelectedTab = RecipesTab.RecipeManagement;
             await LoadTabContent(RecipesTab.RecipeManagement);
         }
 
-        private async void OnTabChanged(RecipesTab tab) => await LoadTabContent(tab);
+        private async void OnTabChanged(RecipesTab tab)
+        {
+            if (Header != null && _currentUserService != null)
+            {
+                var screenKey = tab == RecipesTab.RecipeManagement
+                    ? ScreenKeys.RecipeManagement
+                    : ScreenKeys.RecipeProcess;
+                var rights = _currentUserService.GetRights(screenKey);
+                Header.CanAdd = rights?.CanAdd ?? true;
+                Header.CanEdit = rights?.CanEdit ?? true;
+                Header.CanDelete = rights?.CanDelete ?? true;
+            }
+
+            await LoadTabContent(tab);
+        }
 
         private async Task LoadTabContent(RecipesTab tab)
         {
-            // Cleanup Old Tab
             CurrentContentViewModel?.Cleanup();
 
             BaseViewModel newVm = null;
