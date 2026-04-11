@@ -47,6 +47,10 @@
             <views:UserGroupEditView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:UserRightsViewModel}">
+            <views:UserRightsView />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vmMaterials:MaterialsViewModel}">
             <viewsMaterial:MaterialsView />
         </DataTemplate>

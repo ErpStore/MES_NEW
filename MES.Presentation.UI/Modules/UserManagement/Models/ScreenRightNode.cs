@@ -5,8 +5,8 @@ namespace MES.Presentation.UI.Modules.UserManagement.Models
 {
     /// <summary>
     /// Represents a node in the User Group Rights tree.
-    /// Leaf nodes (IsLeaf = true) have a ScreenKey and a CanAssign flag.
-    /// Parent nodes aggregate children states.
+    /// Leaf nodes (IsLeaf = true) have a ScreenKey and permission flags.
+    /// Parent nodes propagate changes to children.
     /// </summary>
     public partial class ScreenRightNode : ObservableObject
     {
@@ -19,6 +19,15 @@ namespace MES.Presentation.UI.Modules.UserManagement.Models
         [ObservableProperty]
         private bool _isAssigned;
 
+        [ObservableProperty]
+        private bool _canAdd;
+
+        [ObservableProperty]
+        private bool _canEdit;
+
+        [ObservableProperty]
+        private bool _canDelete;
+
         public bool IsLeaf => Children.Count == 0;
 
         public ObservableCollection<ScreenRightNode> Children { get; } = new();
@@ -28,6 +37,24 @@ namespace MES.Presentation.UI.Modules.UserManagement.Models
             // Propagate to children when a parent node is toggled
             foreach (var child in Children)
                 child.IsAssigned = value;
+        }
+
+        partial void OnCanAddChanged(bool value)
+        {
+            foreach (var child in Children)
+                child.CanAdd = value;
+        }
+
+        partial void OnCanEditChanged(bool value)
+        {
+            foreach (var child in Children)
+                child.CanEdit = value;
+        }
+
+        partial void OnCanDeleteChanged(bool value)
+        {
+            foreach (var child in Children)
+                child.CanDelete = value;
         }
     }
 }
