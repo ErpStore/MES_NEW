@@ -191,7 +191,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Failed to save rights.");
-                System.Windows.MessageBox.Show($"Error saving rights: {ex.Message}", "Error");
+                System.Windows.MessageBox.Show($"Failed to save user rights: {ex.Message}", "Error");
             }
         }
 

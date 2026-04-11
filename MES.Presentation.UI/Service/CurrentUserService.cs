@@ -1,4 +1,5 @@
 using MES.ApplicationLayer.User.Dtos;
+using MES.Presentation.UI.Common;
 
 namespace MES.Presentation.UI.Service
 {
@@ -10,7 +11,7 @@ namespace MES.Presentation.UI.Service
 
         public bool IsLoggedIn => _currentUser != null;
 
-        public bool IsAdmin => _currentUser?.Id == 1;
+        public bool IsAdmin => _currentUser?.Id == AppConstants.AdminUserId;
 
         public UserDto? CurrentUser => _currentUser;
 

@@ -16,4 +16,15 @@ namespace MES.Presentation.UI.Common
         public const string RecipeProcess = "RecipeProcess";
         public const string OrderManagement = "OrderManagement";
     }
+
+    /// <summary>
+    /// Application-wide constants.
+    /// </summary>
+    public static class AppConstants
+    {
+        /// <summary>
+        /// The user ID of the built-in administrator account that has full system access.
+        /// </summary>
+        public const int AdminUserId = 1;
+    }
 }
