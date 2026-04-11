@@ -39,6 +39,9 @@ namespace MES.Presentation.UI.Bootstrapper
                 configure.AddConsole(); // Logs to Console window (if available)
             });
 
+            // ===== Session Service =====
+            services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
             // ===== Controls =====
             services.AddSingleton<HeaderBarViewModel>();
             services.AddSingleton<SideMenuViewModel>();
@@ -47,11 +50,14 @@ namespace MES.Presentation.UI.Bootstrapper
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
             services.AddSingleton<IDialogService, DialogService>();
+
             // 2. Register ViewModels (Transient = New one every time)
             services.AddTransient<UsersListViewModel>();
             services.AddTransient<UserEditViewModel>();
             services.AddTransient<UserListDepartmentsViewModel>();
             services.AddTransient<UserGroupEditViewModel>();
+            services.AddTransient<UserGroupRightsViewModel>();
+            services.AddTransient<LoginViewModel>();
             services.AddTransient<MaterialGroupListViewModel>();
             services.AddTransient<MaterialManagementListViewModel>();
             services.AddTransient<MaterialManagementEditViewModel>();
@@ -75,9 +81,10 @@ namespace MES.Presentation.UI.Bootstrapper
             services.AddTransient<OrdersView>();
 
             // 3. MAP VIEWMODELS TO VIEWS
-            // This tells the generic service which View to open for which ViewModel
             DialogService.RegisterDialog<UserEditViewModel, UserEditView>();
             DialogService.RegisterDialog<UserGroupEditViewModel, UserGroupEditView>();
+            DialogService.RegisterDialog<UserGroupRightsViewModel, UserGroupRightsView>();
+            DialogService.RegisterDialog<LoginViewModel, LoginView>();
             DialogService.RegisterDialog<MaterialGroupEditViewModel, MaterialGroupEditView>();
             DialogService.RegisterDialog<MaterialManagementEditViewModel, MaterialManagementEditView>();
             DialogService.RegisterDialog<FeedingPathEditViewModel, FeedingPathEditView>();
@@ -85,18 +92,6 @@ namespace MES.Presentation.UI.Bootstrapper
             DialogService.RegisterDialog<RecipeProcessEditViewModel, RecipeProcessEditView>();
             DialogService.RegisterDialog<OrderManagementEditViewModel, OrderManagementEditView>();
 
-            // Future examples:
-            // DialogService.RegisterDialog<OrderEditViewModel, OrderEditView>();
-            // DialogService.RegisterDialog<MaterialEditViewModel, MaterialEditView>();
-
-            //// ===== Modules (Views will be resolved by DataTemplate) =====
-            //services.AddTransient<OverviewViewModel>();
-            //services.AddTransient<MaterialViewModel>();
-
-            //// ===== Application / Infrastructure (later) =====
-            //// services.AddTransient<IMaterialService, MaterialService>();
-            //// services.AddTransient<IMaterialRepository, MaterialRepository>();
-            ///string connectionString = "Server=localhost;Database=MES_Trikala_DB;Trusted_Connection=True;TrustServerCertificate=True;";
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SaveUserHandler).Assembly));
             services.AddDbContext<MesDbContext>(options => options.UseSqlServer(ConnectionString));
             return services;

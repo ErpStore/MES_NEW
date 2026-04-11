@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MES.Presentation.UI.Common;
+using MES.Presentation.UI.Service;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -8,17 +9,20 @@ namespace MES.Presentation.UI.Controls
 {
     public partial class HeaderBarViewModel : ObservableObject
     {
+        private readonly ICurrentUserService _currentUserService;
+
         [ObservableProperty]
         private string _currentDateTime;
 
         [ObservableProperty]
-        private string _userName = "Trikala"; // Default as per image
+        private string _userName = "Guest";
 
         private readonly DispatcherTimer _timer;
 
-        public HeaderBarViewModel()
+        public HeaderBarViewModel(ICurrentUserService currentUserService)
         {
-            // Initialize the timer for the real-time clock
+            _currentUserService = currentUserService;
+
             _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
@@ -26,13 +30,18 @@ namespace MES.Presentation.UI.Controls
             _timer.Tick += (s, e) => UpdateTime();
             _timer.Start();
 
-            UpdateTime(); // Initial call
+            UpdateTime();
+            UpdateUserName();
         }
 
         private void UpdateTime()
         {
-            // Matches the format: 1/7/2026 12:39:54 AM
             CurrentDateTime = DateTime.Now.ToString("dd/M/yyyy h:mm:ss tt");
+        }
+
+        public void UpdateUserName()
+        {
+            UserName = _currentUserService.CurrentUser?.UserName ?? "Guest";
         }
     }
 }
