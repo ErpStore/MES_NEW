@@ -55,8 +55,8 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
 
             // #1.1 Configuration
             var config = new ScreenRightNode { DisplayName = "#1.1 Configuration" };
-            var desc = new ScreenRightNode { DisplayName = "#1.1.1 Decription" };
-            desc.Children.Add(MakeLeaf("#1.1.1.1 Plant Decription", "PlantDescription"));
+            var desc = new ScreenRightNode { DisplayName = "#1.1.1 Description" };
+            desc.Children.Add(MakeLeaf("#1.1.1.1 Plant Description", "PlantDescription"));
             config.Children.Add(desc);
 
             var userAdmin = new ScreenRightNode { DisplayName = "#1.1.2 User Administration" };
@@ -75,8 +75,8 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
             root.Children.Add(material);
 
             // #1.3 Recipe
-            var recipe = new ScreenRightNode { DisplayName = "#1.3 Recpe" };
-            var recipeSub = new ScreenRightNode { DisplayName = "#1.3.1 Recpes" };
+            var recipe = new ScreenRightNode { DisplayName = "#1.3 Recipe" };
+            var recipeSub = new ScreenRightNode { DisplayName = "#1.3.1 Recipes" };
             recipeSub.Children.Add(MakeLeaf("#1.3.1.1 Recipe Management", ScreenKeys.RecipeManagement));
             recipeSub.Children.Add(MakeLeaf("#1.3.1.2 Recipe Process", ScreenKeys.RecipeProcess));
             recipe.Children.Add(recipeSub);
