@@ -1,0 +1,103 @@
+<UserControl x:Class="MES.Presentation.UI.Modules.UserManagement.Views.UserRightsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MES.Presentation.UI.Modules.UserManagement.Views"
+             mc:Ignorable="d"
+             Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Column Headers -->
+        <Grid Grid.Row="0" Background="#001C3B" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Assignable authorization"
+                       Foreground="White"
+                       FontWeight="SemiBold"
+                       FontSize="11"
+                       Margin="8,0,0,0"
+                       VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1"
+                       Text="Can Add"
+                       Foreground="White"
+                       FontWeight="SemiBold"
+                       FontSize="11"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="2"
+                       Text="Can Edit"
+                       Foreground="White"
+                       FontWeight="SemiBold"
+                       FontSize="11"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="3"
+                       Text="Can Delete"
+                       Foreground="White"
+                       FontWeight="SemiBold"
+                       FontSize="11"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Rights Tree -->
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Background="White"
+                      BorderBrush="#DDDDDD"
+                      BorderThickness="1">
+            <TreeView ItemsSource="{Binding RightNodes}"
+                      Background="Transparent"
+                      BorderThickness="0">
+                <TreeView.Resources>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="True"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="2,2"/>
+                    </Style>
+                </TreeView.Resources>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <Grid Margin="0,1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding DisplayName}"
+                                       FontSize="11"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"/>
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding CanAdd, Mode=TwoWay}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
+                            <CheckBox Grid.Column="2"
+                                      IsChecked="{Binding CanEdit, Mode=TwoWay}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
+                            <CheckBox Grid.Column="3"
+                                      IsChecked="{Binding CanDelete, Mode=TwoWay}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
+                        </Grid>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

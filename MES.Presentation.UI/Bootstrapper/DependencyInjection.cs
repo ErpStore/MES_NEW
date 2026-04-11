@@ -58,6 +58,7 @@ namespace MES.Presentation.UI.Bootstrapper
             services.AddTransient<UserListDepartmentsViewModel>();
             services.AddTransient<UserGroupEditViewModel>();
             services.AddTransient<UserGroupRightsViewModel>();
+            services.AddTransient<UserRightsViewModel>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MaterialGroupListViewModel>();
             services.AddTransient<MaterialManagementListViewModel>();

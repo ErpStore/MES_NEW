@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging; // Required for Messenger
 using MediatR; // Required for passing to children
@@ -54,6 +54,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
 
             Header.Tabs.Add(UsersTab.Users);
             Header.Tabs.Add(UsersTab.UserDepartments);
+            Header.Tabs.Add(UsersTab.UserRights);
 
             Header.SelectedTab = UsersTab.Users;
             Header.TabChangedRequested += OnTabChanged;
@@ -83,6 +84,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
 
             Header.Tabs.Add(UsersTab.Users);
             Header.Tabs.Add(UsersTab.UserDepartments);
+            Header.Tabs.Add(UsersTab.UserRights);
 
             Header.SelectedTab = UsersTab.Users;
             Header.TabChangedRequested += OnTabChanged;
@@ -111,6 +113,10 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
 
                 case UsersTab.UserDepartments:
                     CurrentContentViewModel = _viewModelFactory.Create<UserListDepartmentsViewModel>();
+                    break;
+
+                case UsersTab.UserRights:
+                    CurrentContentViewModel = _viewModelFactory.Create<UserRightsViewModel>();
                     break;
             }
 
