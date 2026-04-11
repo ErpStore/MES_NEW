@@ -8,46 +8,82 @@
              Background="White">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="38"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Column Headers -->
-        <Grid Grid.Row="0" Background="#001C3B" Margin="0,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="70"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Assignable authorization"
-                       Foreground="White"
-                       FontWeight="SemiBold"
-                       FontSize="11"
-                       Margin="8,0,0,0"
-                       VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1"
-                       Text="Can Add"
-                       Foreground="White"
-                       FontWeight="SemiBold"
-                       FontSize="11"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="2"
-                       Text="Can Edit"
-                       Foreground="White"
-                       FontWeight="SemiBold"
-                       FontSize="11"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="3"
-                       Text="Can Delete"
-                       Foreground="White"
-                       FontWeight="SemiBold"
-                       FontSize="11"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-        </Grid>
+        <Border Grid.Row="0" Background="#001C3B">
+            <DockPanel LastChildFill="True">
+                <!-- DELETE header – docked right first so it ends up rightmost -->
+                <Border DockPanel.Dock="Right" Width="70"
+                        BorderBrush="#1A3A5C" BorderThickness="1,0,0,0">
+                    <Border.Background>
+                        <SolidColorBrush Color="#001C3B"/>
+                    </Border.Background>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border Background="#C62828" CornerRadius="2"
+                                Padding="6,1" Margin="0,0,0,2"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="DELETE"
+                                       Foreground="White"
+                                       FontSize="9"
+                                       FontWeight="Bold"/>
+                        </Border>
+                        <TextBlock Text="Remove records"
+                                   Foreground="#AAAAAA"
+                                   FontSize="8"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- EDIT header -->
+                <Border DockPanel.Dock="Right" Width="70"
+                        BorderBrush="#1A3A5C" BorderThickness="1,0,0,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border Background="#1565C0" CornerRadius="2"
+                                Padding="6,1" Margin="0,0,0,2"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="EDIT"
+                                       Foreground="White"
+                                       FontSize="9"
+                                       FontWeight="Bold"/>
+                        </Border>
+                        <TextBlock Text="Modify records"
+                                   Foreground="#AAAAAA"
+                                   FontSize="8"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- ADD header -->
+                <Border DockPanel.Dock="Right" Width="70"
+                        BorderBrush="#1A3A5C" BorderThickness="1,0,0,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border Background="#2E7D32" CornerRadius="2"
+                                Padding="6,1" Margin="0,0,0,2"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="ADD"
+                                       Foreground="White"
+                                       FontSize="9"
+                                       FontWeight="Bold"/>
+                        </Border>
+                        <TextBlock Text="Create records"
+                                   Foreground="#AAAAAA"
+                                   FontSize="8"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Title label fills remaining left space -->
+                <TextBlock Text="Assignable Authorization"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           FontSize="12"
+                           Margin="10,0,0,0"
+                           VerticalAlignment="Center"/>
+            </DockPanel>
+        </Border>
 
         <!-- Rights Tree -->
         <ScrollViewer Grid.Row="1"
@@ -63,38 +99,44 @@
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsExpanded" Value="True"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="Padding" Value="2,2"/>
+                        <Setter Property="Padding" Value="2,3"/>
                     </Style>
                 </TreeView.Resources>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <Grid Margin="0,1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="60"/>
-                            </Grid.ColumnDefinitions>
+                        <DockPanel MinHeight="24" LastChildFill="True">
+                            <!-- Checkbox panel docked to right; total width 210 px = 3 × 70
+                                 This matches the three 70-px header columns exactly so that
+                                 the checkboxes stay aligned regardless of tree indentation. -->
+                            <StackPanel DockPanel.Dock="Right"
+                                        Orientation="Horizontal"
+                                        Width="210"
+                                        Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}">
+                                <!-- ADD -->
+                                <Border Width="70" BorderBrush="#EEEEEE" BorderThickness="1,0,0,0">
+                                    <CheckBox IsChecked="{Binding CanAdd, Mode=TwoWay}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                </Border>
+                                <!-- EDIT -->
+                                <Border Width="70" BorderBrush="#EEEEEE" BorderThickness="1,0,0,0">
+                                    <CheckBox IsChecked="{Binding CanEdit, Mode=TwoWay}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                </Border>
+                                <!-- DELETE -->
+                                <Border Width="70" BorderBrush="#EEEEEE" BorderThickness="1,0,0,0">
+                                    <CheckBox IsChecked="{Binding CanDelete, Mode=TwoWay}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+
                             <TextBlock Text="{Binding DisplayName}"
                                        FontSize="11"
                                        VerticalAlignment="Center"
                                        TextTrimming="CharacterEllipsis"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding CanAdd, Mode=TwoWay}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
-                            <CheckBox Grid.Column="2"
-                                      IsChecked="{Binding CanEdit, Mode=TwoWay}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
-                            <CheckBox Grid.Column="3"
-                                      IsChecked="{Binding CanDelete, Mode=TwoWay}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
-                        </Grid>
+                        </DockPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
