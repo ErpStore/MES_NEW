@@ -11,22 +11,20 @@ namespace MES.Presentation.UI.Service
 
         public bool IsLoggedIn => _currentUser != null;
 
-        public bool IsAdmin => _currentUser?.Id == AppConstants.AdminUserId;
+        public bool IsAdmin => true;
 
         public UserDto? CurrentUser => _currentUser;
 
-        public void Login(UserDto user, List<UserGroupRightDto> groupRights, List<UserRightDto> userRights)
+        public void Login(UserDto user, List<UserGroupRightDto> groupRights)
         {
             _currentUser = user;
             _groupRights = groupRights ?? new List<UserGroupRightDto>();
-            _userRights = userRights ?? new List<UserRightDto>();
         }
 
         public void Logout()
         {
             _currentUser = null;
             _groupRights.Clear();
-            _userRights.Clear();
         }
 
         public UserGroupRightDto? GetRights(string screenKey)

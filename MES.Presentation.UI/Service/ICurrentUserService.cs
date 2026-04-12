@@ -7,7 +7,7 @@ namespace MES.Presentation.UI.Service
         bool IsLoggedIn { get; }
         bool IsAdmin { get; }
         UserDto? CurrentUser { get; }
-        void Login(UserDto user, List<UserGroupRightDto> groupRights, List<UserRightDto> userRights);
+        void Login(UserDto user, List<UserGroupRightDto> groupRights);
         void Logout();
         UserGroupRightDto? GetRights(string screenKey);
     }

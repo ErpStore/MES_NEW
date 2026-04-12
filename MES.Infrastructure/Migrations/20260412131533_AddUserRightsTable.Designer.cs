@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MES.Infrastructure.Migrations
 {
     [DbContext(typeof(MesDbContext))]
-    [Migration("20260412020501_AddUserRightsTable")]
+    [Migration("20260412131533_AddUserRightsTable")]
     partial class AddUserRightsTable
     {
         /// <inheritdoc />

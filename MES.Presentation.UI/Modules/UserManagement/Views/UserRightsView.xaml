@@ -39,7 +39,7 @@
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
-                                <Run Text="{Binding FullName}"/>
+                                <Run  Text="{Binding FullName, Mode=OneWay}"/>
                                 <Run Text=" ("/>
                                 <Run Text="{Binding UserName}"/>
                                 <Run Text=")"/>

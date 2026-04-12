@@ -13,11 +13,11 @@ public class MesDbContext : DbContext
 
     public DbSet<UserGroup> UserGroups { get; set; } // Add this
 
-        public DbSet<UserGroupRight> UserGroupRights { get; set; }
+    public DbSet<UserGroupRight> UserGroupRights { get; set; }
 
-        public DbSet<UserRight> UserRights { get; set; }
+    public DbSet<UserRight> UserRights { get; set; }
 
-        public DbSet<MaterialGroup> MaterialGroups { get; set; }
+    public DbSet<MaterialGroup> MaterialGroups { get; set; }
 
     public DbSet<Material> Materials { get; set; }
 

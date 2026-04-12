@@ -99,7 +99,7 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
 
                 if (result.Success && result.User != null)
                 {
-                    _currentUserService.Login(result.User, result.Rights, result.UserRights);
+                    _currentUserService.Login(result.User, result.Rights);
                     _logger?.LogInformation("User {UserName} logged in.", result.User.UserName);
                     //_navigationService.Navigate(AppPage.Users);
                     CloseAction?.Invoke(true);

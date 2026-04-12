@@ -71,28 +71,13 @@ namespace MES.ApplicationLayer.User.Handlers
                         .ToListAsync(cancellationToken);
                 }
 
-                var userRights = await _context.UserRights
-                    .AsNoTracking()
-                    .Where(r => r.UserId == user.Id)
-                    .Select(r => new UserRightDto
-                    {
-                        Id = r.Id,
-                        UserId = r.UserId,
-                        ScreenKey = r.ScreenKey,
-                        CanAdd = r.CanAdd,
-                        CanEdit = r.CanEdit,
-                        CanDelete = r.CanDelete
-                    })
-                    .ToListAsync(cancellationToken);
-
                 _logger?.LogInformation("User {UserName} logged in successfully.", request.UserName);
 
                 return new LoginResultDto
                 {
                     Success = true,
                     User = userDto,
-                    Rights = rights,
-                    UserRights = userRights
+                    Rights = rights
                 };
             }
             catch (Exception ex)
