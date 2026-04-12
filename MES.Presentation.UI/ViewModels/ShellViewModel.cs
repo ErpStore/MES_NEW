@@ -18,6 +18,7 @@ public partial class ShellViewModel : BaseViewModel
     private readonly IDialogService _dialogService;
     private readonly IViewModelFactory _viewModelFactory;
     private readonly INavigationService _navigationService;
+    private readonly ICurrentUserService _userService;
     private const string DefaultTitle = "TRIKALA ERP";
 
     [ObservableProperty]
@@ -32,12 +33,13 @@ public partial class ShellViewModel : BaseViewModel
     public string ApplicationTitle => DefaultTitle;
 
     public ShellViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory,
-        INavigationService navigationService, HeaderBarViewModel headerBar, SideMenuViewModel sideMenu)
+        INavigationService navigationService, ICurrentUserService userService, HeaderBarViewModel headerBar, SideMenuViewModel sideMenu)
     {
         _mediator = mediator;
         _dialogService = dialogService;
         _viewModelFactory = viewModelFactory;
         _navigationService = navigationService;
+        _userService = userService;
         _navigationService.NavigateRequested += NavigateTo;
         this.headerBar = headerBar;
         this.sideMenu = sideMenu;
@@ -48,7 +50,7 @@ public partial class ShellViewModel : BaseViewModel
         CurrentViewModel = e.Page switch
         {
             AppPage.Overview => new OverviewViewModel(),
-            AppPage.Users => new UsersViewModel(_mediator, _dialogService, _viewModelFactory),
+            AppPage.Users => new UsersViewModel(_mediator, _dialogService, _viewModelFactory, _userService),
             AppPage.Material => new MaterialsViewModel(_mediator, _dialogService, _viewModelFactory),
             AppPage.Recipe => new RecipesViewModel(_mediator, _dialogService, _viewModelFactory),
             AppPage.Orders => new OrderManagementViewModel(_viewModelFactory),

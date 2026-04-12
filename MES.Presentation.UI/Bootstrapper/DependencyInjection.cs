@@ -38,6 +38,9 @@ public static class DependencyInjection
             configure.AddConsole(); // Logs to Console window (if available)
         });
 
+        // ===== Session Service =====
+        services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
         // ===== Controls =====
         services.AddSingleton<HeaderBarViewModel>();
         services.AddSingleton<SideMenuViewModel>();
@@ -46,13 +49,19 @@ public static class DependencyInjection
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IViewModelFactory, ViewModelFactory>();
         services.AddSingleton<IDialogService, DialogService>();
+
         // 2. Register ViewModels (Transient = New one every time)
+        services.AddTransient<UsersViewModel>();
         services.AddTransient<UsersListViewModel>();
         services.AddTransient<UserEditViewModel>();
         services.AddTransient<UserListDepartmentsViewModel>();
         services.AddTransient<UserGroupEditViewModel>();
+        services.AddTransient<UserGroupRightsViewModel>();
+        services.AddTransient<UserRightsViewModel>();
+        services.AddTransient<LoginViewModel>();
         services.AddTransient<MaterialGroupListViewModel>();
         services.AddTransient<MaterialManagementListViewModel>();
+        services.AddTransient<MaterialsViewModel>();
         services.AddTransient<MaterialManagementEditViewModel>();
         services.AddTransient<MaterialManagementEditView>();
         services.AddTransient<MaterialGroupEditViewModel>();
@@ -74,9 +83,10 @@ public static class DependencyInjection
         services.AddTransient<OrdersView>();
 
         // 3. MAP VIEWMODELS TO VIEWS
-        // This tells the generic service which View to open for which ViewModel
         DialogService.RegisterDialog<UserEditViewModel, UserEditView>();
         DialogService.RegisterDialog<UserGroupEditViewModel, UserGroupEditView>();
+        DialogService.RegisterDialog<UserGroupRightsViewModel, UserGroupRightsView>();
+        DialogService.RegisterDialog<LoginViewModel, LoginView>();
         DialogService.RegisterDialog<MaterialGroupEditViewModel, MaterialGroupEditView>();
         DialogService.RegisterDialog<MaterialManagementEditViewModel, MaterialManagementEditView>();
         DialogService.RegisterDialog<FeedingPathEditViewModel, FeedingPathEditView>();
@@ -84,20 +94,11 @@ public static class DependencyInjection
         DialogService.RegisterDialog<RecipeProcessEditViewModel, RecipeProcessEditView>();
         DialogService.RegisterDialog<OrderManagementEditViewModel, OrderManagementEditView>();
 
-        // Future examples:
-        // DialogService.RegisterDialog<OrderEditViewModel, OrderEditView>();
-        // DialogService.RegisterDialog<MaterialEditViewModel, MaterialEditView>();
-
-        //// ===== Modules (Views will be resolved by DataTemplate) =====
-        //services.AddTransient<OverviewViewModel>();
-        //services.AddTransient<MaterialViewModel>();
-
-        //// ===== Application / Infrastructure (later) =====
-        //// services.AddTransient<IMaterialService, MaterialService>();
-        //// services.AddTransient<IMaterialRepository, MaterialRepository>();
-        ///string connectionString = "Server=localhost;Database=MES_Trikala_DB;Trusted_Connection=True;TrustServerCertificate=True;";
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SaveUserHandler).Assembly));
-        services.AddDbContext<MesDbContext>(options => options.UseSqlServer(ConnectionString));
+        services.AddDbContext<MesDbContext>(options =>
+        {
+            options.UseSqlServer(ConnectionString);
+        }, ServiceLifetime.Transient);
         return services;
     }
 }

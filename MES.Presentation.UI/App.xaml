@@ -1,7 +1,6 @@
 ﻿<Application x:Class="MES.Presentation.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MES.Presentation.UI"
              xmlns:conv="clr-namespace:MES.Presentation.UI.Converters" 
              xmlns:vm="clr-namespace:MES.Presentation.UI.Modules.UserManagement.ViewModels"
              xmlns:vmMaterials="clr-namespace:MES.Presentation.UI.Modules.Materials.ViewModel"
@@ -45,6 +44,10 @@
 
         <DataTemplate DataType="{x:Type vm:UserGroupEditViewModel}">
             <views:UserGroupEditView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:UserRightsViewModel}">
+            <views:UserRightsView />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmMaterials:MaterialsViewModel}">

@@ -6,7 +6,7 @@
              xmlns:sidemenuview="clr-namespace:MES.Presentation.UI.Controls.SideMenuView"
              xmlns:conv="clr-namespace:MES.Presentation.UI.Converters"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" 
-             xmlns:nav="clr-namespace:MES.Presentation.UI.Navigation" xmlns:controls="clr-namespace:MES.Presentation.UI.Controls"
+             xmlns:nav="clr-namespace:MES.Presentation.UI.Navigation"
              mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="60">
 
     <UserControl.Resources>

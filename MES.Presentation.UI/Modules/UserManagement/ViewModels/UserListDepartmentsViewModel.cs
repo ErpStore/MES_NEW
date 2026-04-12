@@ -28,19 +28,41 @@ public partial class UserListDepartmentsViewModel : BaseViewModel
     [ObservableProperty]
     private UserGroupDto? _selectedGroup;
 
-    [RelayCommand]
-    private async Task EditGroup()
-    {
-        if (SelectedGroup != null)
+        [RelayCommand]
+        private async Task EditGroup()
         {
-            await OpenUserGroupPopup(SelectedGroup);
-            return;
+            if (SelectedGroup != null)
+            {
+                await OpenUserGroupPopup(SelectedGroup);
+                return;
+            }
         }
-    }
-    [RelayCommand]
-    private async Task DeleteGroup(UserGroupDto userGroupDto)
-    {
-        if (userGroupDto == null) return;
+
+        [RelayCommand]
+        private async Task ManageRights(UserGroupDto? userGroupDto)
+        {
+            if (userGroupDto == null) return;
+
+            var vm = _viewModelFactory?.Create<UserGroupRightsViewModel>();
+            if (vm == null) return;
+
+            await vm.InitializeAsync(userGroupDto);
+
+            try
+            {
+                _logger?.LogInformation("Showing UserGroupRightsView for group {Name}.", userGroupDto.Name);
+                _dialogService?.ShowDialog(vm);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error opening User Group Rights.");
+                _dialogService?.ShowMessage("Could not open rights editor.", "Error");
+            }
+        }
+        [RelayCommand]
+        private async Task DeleteGroup(UserGroupDto userGroupDto)
+        {
+            if (userGroupDto == null) return;
 
         _logger?.LogWarning("Requesting deletion for User: {UserName} ({Id})", userGroupDto.Name, userGroupDto.Id);
 
