@@ -400,6 +400,38 @@ namespace MES.Infrastructure.Migrations
                     b.ToTable("UserGroupRights");
                 });
 
+            modelBuilder.Entity("MES.Domain.Entities.UserRight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("CanAdd")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanEdit")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ScreenKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRights");
+                });
+
             modelBuilder.Entity("MES.Domain.Entities.Materials.FeedingPath", b =>
                 {
                     b.HasOne("MES.Domain.Entities.Materials.Material", "Material")
@@ -470,6 +502,17 @@ namespace MES.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("UserGroup");
+                });
+
+            modelBuilder.Entity("MES.Domain.Entities.UserRight", b =>
+                {
+                    b.HasOne("MES.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MES.Domain.Entities.Materials.MaterialGroup", b =>

@@ -1,47 +1,126 @@
-﻿using MES.Presentation.UI.Common;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MediatR;
+using MES.ApplicationLayer.User.Commands;
+using MES.ApplicationLayer.User.Dtos;
+using MES.ApplicationLayer.User.Quires;
+using MES.Presentation.UI.Common;
 using MES.Presentation.UI.Modules.UserManagement.Models;
 using MES.Presentation.UI.Service;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 
 namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
 {
-    public class UserRightsViewModel : BaseViewModel
+    public partial class UserRightsViewModel : BaseViewModel
     {
         private readonly ICurrentUserService _currentUserService;
+        private readonly IMediator _mediator;
+        private readonly ILogger<UserRightsViewModel>? _logger;
 
         public ObservableCollection<ScreenRightNode> RightNodes { get; } = new();
+        public ObservableCollection<UserDto> Users { get; } = new();
 
-        public UserRightsViewModel(ICurrentUserService currentUserService)
+        [ObservableProperty]
+        private UserDto? _selectedUser;
+
+        [ObservableProperty]
+        private bool _isAdmin;
+
+        public UserRightsViewModel(ICurrentUserService currentUserService, IMediator mediator, ILogger<UserRightsViewModel>? logger = null)
         {
             _currentUserService = currentUserService;
+            _mediator = mediator;
+            _logger = logger;
         }
 
         public override void Initialize()
         {
-            BuildRightsTree();
+            IsAdmin = _currentUserService.IsAdmin;
         }
 
-        public override Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
-            BuildRightsTree();
-            return Task.CompletedTask;
+            IsAdmin = _currentUserService.IsAdmin;
+
+            if (IsAdmin)
+            {
+                await LoadUsers();
+            }
+            else
+            {
+                // Non-admin: show current user's own rights (read-only view)
+                BuildRightsTree(null);
+            }
         }
 
-        private void BuildRightsTree()
+        partial void OnSelectedUserChanged(UserDto? value)
+        {
+            if (value != null)
+                _ = LoadRightsForUserAsync(value.Id);
+        }
+
+        private async Task LoadUsers()
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetUsersQuery());
+                Users.Clear();
+                foreach (var u in result.Where(u => u.IsActive))
+                    Users.Add(u);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to load users.");
+            }
+        }
+
+        private async Task LoadRightsForUserAsync(int userId)
+        {
+            try
+            {
+                var userRights = await _mediator.Send(new GetUserRightsQuery { UserId = userId });
+                BuildRightsTree(userRights);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to load rights for user {UserId}.", userId);
+            }
+        }
+
+        private void BuildRightsTree(List<UserRightDto>? userRights)
         {
             RightNodes.Clear();
 
             ScreenRightNode MakeLeaf(string displayName, string screenKey)
             {
-                var right = _currentUserService.GetRights(screenKey);
-                return new ScreenRightNode
+                if (userRights != null)
                 {
-                    DisplayName = displayName,
-                    ScreenKey = screenKey,
-                    CanAdd    = right?.CanAdd    ?? false,
-                    CanEdit   = right?.CanEdit   ?? false,
-                    CanDelete = right?.CanDelete ?? false
-                };
+                    // Admin editing another user: show per-user rights if they exist, otherwise all unchecked
+                    var right = userRights.FirstOrDefault(r =>
+                        string.Equals(r.ScreenKey, screenKey, StringComparison.OrdinalIgnoreCase));
+                    return new ScreenRightNode
+                    {
+                        DisplayName = displayName,
+                        ScreenKey = screenKey,
+                        CanAdd    = right?.CanAdd    ?? false,
+                        CanEdit   = right?.CanEdit   ?? false,
+                        CanDelete = right?.CanDelete ?? false
+                    };
+                }
+                else
+                {
+                    // Non-admin: show current user's effective rights (read-only)
+                    var right = _currentUserService.GetRights(screenKey);
+                    return new ScreenRightNode
+                    {
+                        DisplayName = displayName,
+                        ScreenKey = screenKey,
+                        CanAdd    = right?.CanAdd    ?? false,
+                        CanEdit   = right?.CanEdit   ?? false,
+                        CanDelete = right?.CanDelete ?? false
+                    };
+                }
             }
 
             var root = new ScreenRightNode { DisplayName = "#1 EnJoin MES-Manual chemical System" };
@@ -90,6 +169,61 @@ namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
             root.Children.Add(order);
 
             RightNodes.Add(root);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanSave))]
+        private async Task Save()
+        {
+            if (SelectedUser == null) return;
+
+            try
+            {
+                var rights = CollectLeafRights(SelectedUser.Id);
+                await _mediator.Send(new SaveUserRightsCommand
+                {
+                    UserId = SelectedUser.Id,
+                    Rights = rights
+                });
+
+                _logger?.LogInformation("Saved {Count} rights for UserId {Id}", rights.Count, SelectedUser.Id);
+                System.Windows.MessageBox.Show("Rights saved successfully.", "Saved", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to save rights.");
+                System.Windows.MessageBox.Show($"Failed to save user rights: {ex.Message}", "Error");
+            }
+        }
+
+        private bool CanSave() => IsAdmin && SelectedUser != null;
+
+        private List<UserRightDto> CollectLeafRights(int userId)
+        {
+            var result = new List<UserRightDto>();
+            CollectFromNode(RightNodes, userId, result);
+            return result;
+        }
+
+        private static void CollectFromNode(IEnumerable<ScreenRightNode> nodes, int userId, List<UserRightDto> result)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.IsLeaf && node.ScreenKey != null)
+                {
+                    result.Add(new UserRightDto
+                    {
+                        UserId = userId,
+                        ScreenKey = node.ScreenKey,
+                        CanAdd = node.CanAdd,
+                        CanEdit = node.CanEdit,
+                        CanDelete = node.CanDelete
+                    });
+                }
+                else
+                {
+                    CollectFromNode(node.Children, userId, result);
+                }
+            }
         }
     }
 }
