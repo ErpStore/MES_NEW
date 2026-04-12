@@ -1,21 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using MES.Presentation.UI.Shell;
-using Microsoft.Extensions.DependencyInjection;
+﻿namespace MES.Presentation.UI.Navigation;
 
-namespace MES.Presentation.UI.Navigation
+public class NavigationService : INavigationService
 {
-    public class NavigationService : INavigationService
+    public event EventHandler<NavigationEventArgs>? NavigateRequested;
+
+    public void Navigate(AppPage page)
     {
-        private readonly ShellViewModel _shell;
-
-        public NavigationService(ShellViewModel shell)
-        {
-            _shell = shell;
-        }
-
-        public void Navigate(AppPage page)
-        {
-            _shell.NavigateTo(page);
-        }
+        NavigateRequested?.Invoke(this, new NavigationEventArgs(page));
     }
 }

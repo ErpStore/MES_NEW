@@ -12,199 +12,198 @@ using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Windows;
 
-namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
+namespace MES.Presentation.UI.Modules.UserManagement.ViewModels;
+
+public partial class UsersListViewModel : BaseViewModel
 {
-    public partial class UsersListViewModel : BaseViewModel
+    private readonly IMediator _mediator;
+    private readonly IDialogService _dialogService;
+    private readonly IViewModelFactory _viewModelFactory;
+    private readonly ILogger<UsersListViewModel>? _logger;
+
+    // =========================
+    // DATA
+    // =========================
+    public ObservableCollection<UserDto> Users { get; } = new();
+    private ObservableCollection<UserDto> _allUsers = new();
+
+    // =========================
+    // SELECTION
+    // =========================
+    // FIX 1: Make nullable (?) to stop "must contain non-null value" warning
+    [ObservableProperty]
+    private UserDto? _selectedUser;
+
+    // =========================
+    // SEARCH
+    // =========================
+    // FIX 2: Initialize with string.Empty to avoid null warnings
+    [ObservableProperty]
+    private string _searchText = string.Empty;
+
+    // =========================
+    // CONSTRUCTOR
+    // =========================
+    public UsersListViewModel(IMediator mediator, 
+        IDialogService dialogService,
+        IViewModelFactory viewModelFactory,
+        ILogger<UsersListViewModel> logger)
     {
-        private readonly IMediator _mediator;
-        private readonly IDialogService _dialogService;
-        private readonly IViewModelFactory _viewModelFactory;
-        private readonly ILogger<UsersListViewModel>? _logger;
+        _mediator = mediator;
+        _dialogService = dialogService;
+        _logger = logger;
 
-        // =========================
-        // DATA
-        // =========================
-        public ObservableCollection<UserDto> Users { get; } = new();
-        private ObservableCollection<UserDto> _allUsers = new();
+        _logger.LogInformation("Initializing UsersListViewModel...");
+        _viewModelFactory = viewModelFactory;
+    }
 
-        // =========================
-        // SELECTION
-        // =========================
-        // FIX 1: Make nullable (?) to stop "must contain non-null value" warning
-        [ObservableProperty]
-        private UserDto? _selectedUser;
+    public override async Task InitializeAsync()
+    {
+        _logger?.LogInformation("UsersListViewModel InitializeAsync called.");
 
-        // =========================
-        // SEARCH
-        // =========================
-        // FIX 2: Initialize with string.Empty to avoid null warnings
-        [ObservableProperty]
-        private string _searchText = string.Empty;
-
-        // =========================
-        // CONSTRUCTOR
-        // =========================
-        public UsersListViewModel(IMediator mediator, 
-            IDialogService dialogService,
-            IViewModelFactory viewModelFactory,
-            ILogger<UsersListViewModel> logger)
+        WeakReferenceMessenger.Default.Register<HeaderActionMessage>(this, async (r, m) =>
         {
-            _mediator = mediator;
-            _dialogService = dialogService;
-            _logger = logger;
+            if (m.ActionType == "Add") await AddUser();
+            if (m.ActionType == "Refresh") await Refresh();
+        });
+        await LoadUsers();
+    }
 
-            _logger.LogInformation("Initializing UsersListViewModel...");
-            _viewModelFactory = viewModelFactory;
-        }
+    // =========================
+    // COMMANDS
+    // =========================
 
-        public override async Task InitializeAsync()
+    [RelayCommand]
+    private async Task Refresh()
+    {
+        _logger.LogInformation("Refresh command triggered.");
+        await LoadUsers();
+    }
+
+    [RelayCommand]
+    private async Task AddUser()
+    {
+        _logger.LogInformation("Add User command triggered.");
+        await OpenUserPopup(null);
+    }
+
+    [RelayCommand]
+    private async Task EditUser()
+    {
+        if (SelectedUser != null)
         {
-            _logger?.LogInformation("UsersListViewModel InitializeAsync called.");
-
-            WeakReferenceMessenger.Default.Register<HeaderActionMessage>(this, async (r, m) =>
-            {
-                if (m.ActionType == "Add") await AddUser();
-                if (m.ActionType == "Refresh") await Refresh();
-            });
-            await LoadUsers();
+            _logger.LogInformation("Edit User command triggered for UserID: {Id}", SelectedUser.Id);
+            await OpenUserPopup(SelectedUser);
         }
+    }
 
-        // =========================
-        // COMMANDS
-        // =========================
+    [RelayCommand]
+    private async Task DeleteUser(UserDto? user)
+    {
+        if (user == null) return;
 
-        [RelayCommand]
-        private async Task Refresh()
-        {
-            _logger.LogInformation("Refresh command triggered.");
-            await LoadUsers();
-        }
+        _logger.LogWarning("Requesting deletion for User: {UserName} ({Id})", user.UserName, user.Id);
 
-        [RelayCommand]
-        private async Task AddUser()
-        {
-            _logger.LogInformation("Add User command triggered.");
-            await OpenUserPopup(null);
-        }
+        var result = MessageBox.Show(
+            $"Are you sure you want to permanently delete user '{user.UserName}'?",
+            "Confirm Delete",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
 
-        [RelayCommand]
-        private async Task EditUser()
-        {
-            if (SelectedUser != null)
-            {
-                _logger.LogInformation("Edit User command triggered for UserID: {Id}", SelectedUser.Id);
-                await OpenUserPopup(SelectedUser);
-            }
-        }
-
-        [RelayCommand]
-        private async Task DeleteUser(UserDto? user)
-        {
-            if (user == null) return;
-
-            _logger.LogWarning("Requesting deletion for User: {UserName} ({Id})", user.UserName, user.Id);
-
-            var result = MessageBox.Show(
-                $"Are you sure you want to permanently delete user '{user.UserName}'?",
-                "Confirm Delete",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                try
-                {
-                    await _mediator.Send(new DeleteUserCommand { Id = user.Id });
-                    _logger.LogInformation("User {Id} deleted successfully.", user.Id);
-                    await LoadUsers();
-                }
-                catch (System.Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to delete user {Id}", user.Id);
-                    MessageBox.Show($"Error deleting user: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            else
-            {
-                _logger.LogInformation("Deletion cancelled by user.");
-            }
-        }
-
-        // =========================
-        // PRIVATE METHODS
-        // =========================
-
-        private async Task OpenUserPopup(UserDto? userToEdit)
-        {
-            var vm = _viewModelFactory.Create<UserEditViewModel>();
-
-            // 2. Initialize: Pass data (Edit Mode vs Add Mode)
-            vm.Initialize(userToEdit);
-
-            try 
-            { 
-                _logger.LogInformation("Showing UserEditView dialog.");
-                bool? result = _dialogService.ShowDialog(vm);
-
-                if (result == true)
-                {
-                    _logger.LogInformation("Dialog returned True (Saved). Reloading list.");
-                    await LoadUsers();
-                }
-                else
-                {
-                    _logger.LogInformation("Dialog returned False or was closed (Cancelled). No action taken.");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error opening User Popup.");
-                _dialogService.ShowMessage("Could not open editor.", "Error");
-            }
-        }
-
-        private async Task LoadUsers()
+        if (result == MessageBoxResult.Yes)
         {
             try
             {
-                _logger.LogDebug("Sending GetUsersQuery...");
-                var userList = await _mediator.Send(new GetUsersQuery());
-
-                _allUsers = new ObservableCollection<UserDto>(userList);
-                _logger.LogInformation("Loaded {Count} users from database.", _allUsers.Count);
-
-                ApplyFilter();
+                await _mediator.Send(new DeleteUserCommand { Id = user.Id });
+                _logger.LogInformation("User {Id} deleted successfully.", user.Id);
+                await LoadUsers();
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                _logger.LogError(ex, "Failed to load users list.");
+                _logger.LogError(ex, "Failed to delete user {Id}", user.Id);
+                MessageBox.Show($"Error deleting user: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        partial void OnSearchTextChanged(string value)
+        else
         {
-            ApplyFilter();
+            _logger.LogInformation("Deletion cancelled by user.");
         }
+    }
 
-        private void ApplyFilter()
-        {
-            Users.Clear();
+    // =========================
+    // PRIVATE METHODS
+    // =========================
 
-            if (string.IsNullOrWhiteSpace(SearchText))
+    private async Task OpenUserPopup(UserDto? userToEdit)
+    {
+        var vm = _viewModelFactory.Create<UserEditViewModel>();
+
+        // 2. Initialize: Pass data (Edit Mode vs Add Mode)
+        vm.Initialize(userToEdit);
+
+        try 
+        { 
+            _logger.LogInformation("Showing UserEditView dialog.");
+            bool? result = _dialogService.ShowDialog(vm);
+
+            if (result == true)
             {
-                foreach (var user in _allUsers) Users.Add(user);
+                _logger.LogInformation("Dialog returned True (Saved). Reloading list.");
+                await LoadUsers();
             }
             else
             {
-                // FIX 9: Handle potential nulls in User properties (e.g. u.Email might be null in DB)
-                var filtered = _allUsers.Where(u =>
-                    (u.UserName != null && u.UserName.Contains(SearchText, System.StringComparison.OrdinalIgnoreCase)) ||
-                    (u.Email != null && u.Email.Contains(SearchText, System.StringComparison.OrdinalIgnoreCase))
-                );
-
-                foreach (var user in filtered)
-                    Users.Add(user);
+                _logger.LogInformation("Dialog returned False or was closed (Cancelled). No action taken.");
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error opening User Popup.");
+            _dialogService.ShowMessage("Could not open editor.", "Error");
+        }
+    }
+
+    private async Task LoadUsers()
+    {
+        try
+        {
+            _logger.LogDebug("Sending GetUsersQuery...");
+            var userList = await _mediator.Send(new GetUsersQuery());
+
+            _allUsers = new ObservableCollection<UserDto>(userList);
+            _logger.LogInformation("Loaded {Count} users from database.", _allUsers.Count);
+
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load users list.");
+        }
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        ApplyFilter();
+    }
+
+    private void ApplyFilter()
+    {
+        Users.Clear();
+
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            foreach (var user in _allUsers) Users.Add(user);
+        }
+        else
+        {
+            // FIX 9: Handle potential nulls in User properties (e.g. u.Email might be null in DB)
+            var filtered = _allUsers.Where(u =>
+                (u.UserName != null && u.UserName.Contains(SearchText, System.StringComparison.OrdinalIgnoreCase)) ||
+                (u.Email != null && u.Email.Contains(SearchText, System.StringComparison.OrdinalIgnoreCase))
+            );
+
+            foreach (var user in filtered)
+                Users.Add(user);
         }
     }
 }

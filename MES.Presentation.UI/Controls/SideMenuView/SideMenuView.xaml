@@ -6,7 +6,7 @@
              xmlns:sidemenuview="clr-namespace:MES.Presentation.UI.Controls.SideMenuView"
              xmlns:conv="clr-namespace:MES.Presentation.UI.Converters"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" 
-             xmlns:nav="clr-namespace:MES.Presentation.UI.Navigation"
+             xmlns:nav="clr-namespace:MES.Presentation.UI.Navigation" xmlns:controls="clr-namespace:MES.Presentation.UI.Controls"
              mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="60">
 
     <UserControl.Resources>
@@ -34,7 +34,7 @@
                     </Button>
                     
                     <sidemenuview:SideMenuItem Icon="Assert/SideMenu_OverView.svg" Text="Overview" Margin="0,30,0,0"
-                        Command="{Binding NavigateCommand}" CommandParameter="Overview"
+                        Command="{Binding NavigateCommand}" CommandParameter="{x:Static nav:AppPage.Overview}"
                         IsActive="{Binding ActiveMenu, ConverterParameter=Overview, Converter={StaticResource ActiveMenuConverter}}" IsExpanded="{Binding IsExpanded}"/>
 
                     <sidemenuview:SideMenuItem Icon="Assert/SideMenu_User_Administration.svg" Text="User Administration"

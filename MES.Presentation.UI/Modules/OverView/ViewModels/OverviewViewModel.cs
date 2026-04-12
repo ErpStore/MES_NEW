@@ -1,8 +1,7 @@
 ﻿using MES.Presentation.UI.Common;
 
-namespace MES.Presentation.UI.Modules.OverView.ViewModels
+namespace MES.Presentation.UI.Modules.OverView.ViewModels;
+
+public class OverviewViewModel : BaseViewModel
 {
-    public class OverviewViewModel : BaseViewModel
-    {
-    }
 }

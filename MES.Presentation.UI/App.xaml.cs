@@ -1,39 +1,40 @@
 ﻿using MES.Presentation.UI.Bootstrapper;
-using MES.Presentation.UI.Shell;
+using MES.Presentation.UI.Views;
+using MES.Presentation.UI.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using System.Configuration;
-using System.Data;
 using System.Windows;
+using MES.Infrastructure.Data;
 
-namespace MES.Presentation.UI
+namespace MES.Presentation.UI;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    private IServiceProvider? _serviceProvider;
+
+    protected override void OnStartup(StartupEventArgs e)
     {
-        private IServiceProvider? _serviceProvider;
+        base.OnStartup(e);
 
-        protected override void OnStartup(StartupEventArgs e)
+        var services = new ServiceCollection();
+
+        // Your extension method
+        services.AddPresentationUI();
+
+        _serviceProvider = services.BuildServiceProvider();
+
+#if DEBUG
+        var dbContext = _serviceProvider.GetService<MesDbContext>();
+        dbContext?.Database.EnsureCreated();
+#endif
+        var mainWindow = new Shell
         {
-            base.OnStartup(e);
+            DataContext = _serviceProvider
+                .GetRequiredService<ShellViewModel>()
+        };
 
-            var services = new ServiceCollection();
-
-            // Your extension method
-            services.AddPresentationUI();
-
-            _serviceProvider = services.BuildServiceProvider();
-
-
-            var mainWindow = new MainWindowView
-            {
-                DataContext = _serviceProvider
-                    .GetRequiredService<MainWindowViewModel>()
-            };
-
-            mainWindow.Show();
-        }
+        mainWindow.Show();
     }
-
 }

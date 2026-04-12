@@ -1,13 +1,12 @@
-﻿namespace MES.Presentation.UI.Navigation
+﻿namespace MES.Presentation.UI.Navigation;
+
+public enum AppPage
 {
-    public enum AppPage
-    {
-        Overview,
-        Users,
-        UserDepartments,
-        Material,
-        Recipe,
-        Orders,
-        Labour
-    }
+    Overview,
+    Users,
+    UserDepartments,
+    Material,
+    Recipe,
+    Orders,
+    Labour
 }

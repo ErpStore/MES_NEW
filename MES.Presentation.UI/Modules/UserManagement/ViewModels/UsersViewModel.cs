@@ -7,113 +7,112 @@ using MES.Presentation.UI.Controls.ListHeaderBar;
 using MES.Presentation.UI.Messages;
 using MES.Presentation.UI.Service;
 
-namespace MES.Presentation.UI.Modules.UserManagement.ViewModels
+namespace MES.Presentation.UI.Modules.UserManagement.ViewModels;
+
+public partial class UsersViewModel : BaseViewModel 
 {
-    public partial class UsersViewModel : BaseViewModel 
+    // We need to store this to pass it to the children (List & Departments)
+    private readonly IMediator _mediator;
+    private readonly IDialogService _dialogService;
+    private readonly IViewModelFactory _viewModelFactory;
+
+    public ListHeaderBarViewModel<UsersTab>? Header { get; set; }
+
+    [ObservableProperty]
+    private BaseViewModel? currentContentViewModel;
+
+    // Inject Mediator here
+    public UsersViewModel(IMediator mediator,
+        IDialogService dialogService,
+        IViewModelFactory viewModelFactory)
     {
-        // We need to store this to pass it to the children (List & Departments)
-        private readonly IMediator _mediator;
-        private readonly IDialogService _dialogService;
-        private readonly IViewModelFactory _viewModelFactory;
+        _mediator = mediator;
+        _dialogService = dialogService;
+        _viewModelFactory = viewModelFactory;
+    }
 
-        public ListHeaderBarViewModel<UsersTab>? Header { get; set; }
-
-        [ObservableProperty]
-        private BaseViewModel? currentContentViewModel;
-
-        // Inject Mediator here
-        public UsersViewModel(IMediator mediator,
-                    IDialogService dialogService,
-                   IViewModelFactory viewModelFactory)
+    public override void Initialize()
+    {
+        Header = new ListHeaderBarViewModel<UsersTab>
         {
-            _mediator = mediator;
-            _dialogService = dialogService;
-            _viewModelFactory = viewModelFactory;
+            CanAdd = true,
+            CanEdit = true,
+            CanDelete = false,
+            CanRefresh = true,
+            CanExport = true,
+            CanCopy = true,
+
+            AddCommand = new RelayCommand(() => SendHeaderMessage("Add")),
+            EditCommand = new RelayCommand(() => SendHeaderMessage("Edit")),
+            RefreshCommand = new RelayCommand(() => SendHeaderMessage("Refresh")),
+            DeleteCommand = new RelayCommand(() => SendHeaderMessage("Delete"))
+        };
+
+        Header.Tabs.Add(UsersTab.Users);
+        Header.Tabs.Add(UsersTab.UserDepartments);
+
+        Header.SelectedTab = UsersTab.Users;
+        Header.TabChangedRequested += OnTabChanged;
+
+        // Initialize default view
+        // Pass the mediator to the child
+        CurrentContentViewModel = _viewModelFactory.Create<UsersListViewModel>();
+    }
+
+    public override async Task InitializeAsync()
+    {
+        var usersList = _viewModelFactory.Create<UsersListViewModel>();
+        Header = new ListHeaderBarViewModel<UsersTab>
+        {
+            CanAdd = true,
+            CanEdit = true,
+            CanDelete = false,
+            CanRefresh = true,
+            CanExport = true,
+            CanCopy = true,
+
+            AddCommand = new RelayCommand(() => SendHeaderMessage("Add")),
+            EditCommand = new RelayCommand(() => SendHeaderMessage("Edit")),
+            RefreshCommand = new RelayCommand(() => SendHeaderMessage("Refresh")),
+            DeleteCommand = new RelayCommand(() => SendHeaderMessage("Delete"))
+        };
+
+        Header.Tabs.Add(UsersTab.Users);
+        Header.Tabs.Add(UsersTab.UserDepartments);
+
+        Header.SelectedTab = UsersTab.Users;
+        Header.TabChangedRequested += OnTabChanged;
+
+        // Initialize default view
+        // Pass the mediator to the child
+        CurrentContentViewModel = usersList;
+        CurrentContentViewModel?.InitializeAsync();
+    }
+
+    // Helper to broadcast the button click
+    private void SendHeaderMessage(string action)
+    {
+        WeakReferenceMessenger.Default.Send(new HeaderActionMessage(action));
+    }
+
+    private void OnTabChanged(UsersTab tab)
+    {
+        if (CurrentContentViewModel != null)
+        {
+            CurrentContentViewModel.Cleanup();
         }
 
-        public override void Initialize()
+        switch (tab)
         {
-            Header = new ListHeaderBarViewModel<UsersTab>
-            {
-                CanAdd = true,
-                CanEdit = true,
-                CanDelete = false,
-                CanRefresh = true,
-                CanExport = true,
-                CanCopy = true,
+            case UsersTab.Users:
+                CurrentContentViewModel = _viewModelFactory.Create<UsersListViewModel>();
+                break;
 
-                AddCommand = new RelayCommand(() => SendHeaderMessage("Add")),
-                EditCommand = new RelayCommand(() => SendHeaderMessage("Edit")),
-                RefreshCommand = new RelayCommand(() => SendHeaderMessage("Refresh")),
-                DeleteCommand = new RelayCommand(() => SendHeaderMessage("Delete"))
-            };
-
-            Header.Tabs.Add(UsersTab.Users);
-            Header.Tabs.Add(UsersTab.UserDepartments);
-
-            Header.SelectedTab = UsersTab.Users;
-            Header.TabChangedRequested += OnTabChanged;
-
-            // Initialize default view
-            // Pass the mediator to the child
-            CurrentContentViewModel = _viewModelFactory.Create<UsersListViewModel>();
+            case UsersTab.UserDepartments:
+                CurrentContentViewModel = _viewModelFactory.Create<UserListDepartmentsViewModel>();
+                break;
         }
 
-        public override async Task InitializeAsync()
-        {
-            var usersList = _viewModelFactory.Create<UsersListViewModel>();
-            Header = new ListHeaderBarViewModel<UsersTab>
-            {
-                CanAdd = true,
-                CanEdit = true,
-                CanDelete = false,
-                CanRefresh = true,
-                CanExport = true,
-                CanCopy = true,
-
-                AddCommand = new RelayCommand(() => SendHeaderMessage("Add")),
-                EditCommand = new RelayCommand(() => SendHeaderMessage("Edit")),
-                RefreshCommand = new RelayCommand(() => SendHeaderMessage("Refresh")),
-                DeleteCommand = new RelayCommand(() => SendHeaderMessage("Delete"))
-            };
-
-            Header.Tabs.Add(UsersTab.Users);
-            Header.Tabs.Add(UsersTab.UserDepartments);
-
-            Header.SelectedTab = UsersTab.Users;
-            Header.TabChangedRequested += OnTabChanged;
-
-            // Initialize default view
-            // Pass the mediator to the child
-            CurrentContentViewModel = usersList;
-            CurrentContentViewModel?.InitializeAsync();
-        }
-
-        // Helper to broadcast the button click
-        private void SendHeaderMessage(string action)
-        {
-            WeakReferenceMessenger.Default.Send(new HeaderActionMessage(action));
-        }
-
-        private void OnTabChanged(UsersTab tab)
-        {
-            if (CurrentContentViewModel != null)
-            {
-                CurrentContentViewModel.Cleanup();
-            }
-
-            switch (tab)
-            {
-                case UsersTab.Users:
-                    CurrentContentViewModel = _viewModelFactory.Create<UsersListViewModel>();
-                    break;
-
-                case UsersTab.UserDepartments:
-                    CurrentContentViewModel = _viewModelFactory.Create<UserListDepartmentsViewModel>();
-                    break;
-            }
-
-            CurrentContentViewModel?.InitializeAsync();
-        }
+        CurrentContentViewModel?.InitializeAsync();
     }
 }
