@@ -7,19 +7,19 @@ using MES.Presentation.UI.Controls.ListHeaderBar;
 using MES.Presentation.UI.Messages;
 using MES.Presentation.UI.Service;
 
-namespace MES.Presentation.UI.Modules.Recipe.ViewModel
-{
-    public enum RecipesTab { RecipeManagement, RecipeProcess }
+namespace MES.Presentation.UI.Modules.Recipe.ViewModel;
+
+public enum RecipesTab { RecipeManagement, RecipeProcess }
 
     public partial class RecipesViewModel : BaseViewModel
     {
         private readonly IViewModelFactory _viewModelFactory;
         private readonly ICurrentUserService? _currentUserService;
 
-        public ListHeaderBarViewModel<RecipesTab>? Header { get; set; }
+    public ListHeaderBarViewModel<RecipesTab>? Header { get; set; }
 
-        [ObservableProperty]
-        private BaseViewModel? _currentContentViewModel;
+    [ObservableProperty]
+    private BaseViewModel? _currentContentViewModel;
 
         public RecipesViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory,
             ICurrentUserService? currentUserService = null)
@@ -49,7 +49,7 @@ namespace MES.Presentation.UI.Modules.Recipe.ViewModel
             Header.Tabs.Add(RecipesTab.RecipeManagement);
             Header.Tabs.Add(RecipesTab.RecipeProcess);
 
-            Header.TabChangedRequested += OnTabChanged;
+        Header.TabChangedRequested += OnTabChanged;
 
             Header.SelectedTab = RecipesTab.RecipeManagement;
             await LoadTabContent(RecipesTab.RecipeManagement);
@@ -75,27 +75,26 @@ namespace MES.Presentation.UI.Modules.Recipe.ViewModel
         {
             CurrentContentViewModel?.Cleanup();
 
-            BaseViewModel newVm = null;
+        BaseViewModel newVm = null;
 
-            switch (tab)
-            {
-                case RecipesTab.RecipeManagement:
-                    newVm = _viewModelFactory.Create<RecipeListViewModel>();
-                    break;
+        switch (tab)
+        {
+            case RecipesTab.RecipeManagement:
+                newVm = _viewModelFactory.Create<RecipeListViewModel>();
+                break;
 
-                case RecipesTab.RecipeProcess:
-                    newVm = _viewModelFactory.Create<RecipeProcessListViewModel>();
-                    break;
-            }
-
-            if (newVm != null)
-            {
-                CurrentContentViewModel = newVm;
-                await newVm.InitializeAsync();
-            }
+            case RecipesTab.RecipeProcess:
+                newVm = _viewModelFactory.Create<RecipeProcessListViewModel>();
+                break;
         }
 
-        private void SendAction(string action) =>
-            WeakReferenceMessenger.Default.Send(new HeaderActionMessage(action));
+        if (newVm != null)
+        {
+            CurrentContentViewModel = newVm;
+            await newVm.InitializeAsync();
+        }
     }
+
+    private void SendAction(string action) =>
+        WeakReferenceMessenger.Default.Send(new HeaderActionMessage(action));
 }

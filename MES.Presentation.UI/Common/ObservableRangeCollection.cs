@@ -1,39 +1,32 @@
-﻿using SharpVectors.Dom;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MES.Presentation.UI.Common
+namespace MES.Presentation.UI.Common;
+
+public class ObservableRangeCollection<T> : ObservableCollection<T>
 {
-    public class ObservableRangeCollection<T> : ObservableCollection<T>
+    public ObservableRangeCollection() : base() { }
+    public ObservableRangeCollection(IEnumerable<T> collection) : base(collection) { }
+
+    public void AddRange(IEnumerable<T> collection)
     {
-        public ObservableRangeCollection() : base() { }
-        public ObservableRangeCollection(IEnumerable<T> collection) : base(collection) { }
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        CheckReentrancy();
+        foreach (var item in collection) Items.Add(item);
+        OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+        OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+    }
 
-        public void AddRange(IEnumerable<T> collection)
-        {
-            if (collection == null) throw new ArgumentNullException(nameof(collection));
-            CheckReentrancy();
-            foreach (var item in collection) Items.Add(item);
-            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        public void ReplaceRange(IEnumerable<T> collection)
-        {
-            if (collection == null) throw new ArgumentNullException(nameof(collection));
-            CheckReentrancy();
-            Items.Clear();
-            foreach (var item in collection) Items.Add(item);
-            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
+    public void ReplaceRange(IEnumerable<T> collection)
+    {
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        CheckReentrancy();
+        Items.Clear();
+        foreach (var item in collection) Items.Add(item);
+        OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+        OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 }

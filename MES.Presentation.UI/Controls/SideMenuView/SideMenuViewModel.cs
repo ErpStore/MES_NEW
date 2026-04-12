@@ -4,47 +4,46 @@ using MES.Presentation.UI.Common;
 using MES.Presentation.UI.Navigation;
 using System.Windows;
 
-namespace MES.Presentation.UI.Controls
+namespace MES.Presentation.UI.Controls;
+
+public partial class SideMenuViewModel : BaseViewModel
 {
-    public partial class SideMenuViewModel : BaseViewModel
+    private readonly INavigationService _navigationService;
+
+    public SideMenuViewModel(INavigationService navigationService)
     {
-        private readonly INavigationService _navigation;
+        _navigationService = navigationService;
+    }
 
-        public SideMenuViewModel(INavigationService navigation)
-        {
-            _navigation = navigation;
-        }
+    [ObservableProperty]
+    private AppPage activePage = AppPage.Overview;
 
-        [ObservableProperty]
-        private AppPage activePage = AppPage.Overview;
+    [ObservableProperty]
+    private bool isExpanded = false;
 
-        [ObservableProperty]
-        private bool isExpanded = false;
+    public double MenuWidth => IsExpanded ? 200 : 50;
 
-        public double MenuWidth => IsExpanded ? 260 : 200;
+    partial void OnIsExpandedChanged(bool value)
+    {
+        OnPropertyChanged(nameof(MenuWidth));
+    }
 
-        partial void OnIsExpandedChanged(bool value)
-        {
-            OnPropertyChanged(nameof(MenuWidth));
-        }
+    [RelayCommand]
+    private void ToggleMenu()
+    {
+        IsExpanded = !IsExpanded;
+    }
 
-        [RelayCommand]
-        private void ToggleMenu()
-        {
-            IsExpanded = !IsExpanded;
-        }
+    [RelayCommand]
+    private void Exit()
+    {
+        Application.Current.Shutdown();
+    }
 
-        [RelayCommand]
-        private void Exit()
-        {
-            Application.Current.Shutdown();
-        }
-
-        [RelayCommand]
-        private void Navigate(AppPage page)
-        {
-            ActivePage = page;
-            _navigation.Navigate(page);
-        }
+    [RelayCommand]
+    private void Navigate(AppPage page)
+    {
+        ActivePage = page;
+        _navigationService.Navigate(page);
     }
 }

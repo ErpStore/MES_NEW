@@ -1,14 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace MES.Presentation.UI.Navigation;
 
-namespace MES.Presentation.UI.Navigation
+public interface INavigationService
 {
-    public interface INavigationService
-    {
-        void Navigate(AppPage page);
-    }
+    public event EventHandler<NavigationEventArgs> NavigateRequested;
+    void Navigate(AppPage page);
 }

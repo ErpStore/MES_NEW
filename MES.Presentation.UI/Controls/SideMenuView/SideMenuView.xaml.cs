@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace MES.Presentation.UI.Controls.SideMenuView
+namespace MES.Presentation.UI.Controls.SideMenuView;
+
+/// <summary>
+/// Interaction logic for SideMenuView.xaml
+/// </summary>
+public partial class SideMenuView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for SideMenuView.xaml
-    /// </summary>
-    public partial class SideMenuView : UserControl
+    public SideMenuView()
     {
-        public SideMenuView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

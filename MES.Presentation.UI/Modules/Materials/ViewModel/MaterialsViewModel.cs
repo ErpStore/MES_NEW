@@ -6,15 +6,10 @@ using MES.Presentation.UI.Common;
 using MES.Presentation.UI.Controls.ListHeaderBar;
 using MES.Presentation.UI.Messages;
 using MES.Presentation.UI.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MES.Presentation.UI.Modules.Materials.ViewModel
-{
-    public enum MaterialsTab { MaterialGroup, MaterialManagement, FeedingPath }
+namespace MES.Presentation.UI.Modules.Materials.ViewModel;
+
+public enum MaterialsTab { MaterialGroup, MaterialManagement, FeedingPath }
 
     public partial class MaterialsViewModel : BaseViewModel
     {
@@ -23,10 +18,10 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
         private readonly IMediator? _mediator;
         private readonly ICurrentUserService? _currentUserService;
 
-        public ListHeaderBarViewModel<MaterialsTab>? Header { get; set; }
+    public ListHeaderBarViewModel<MaterialsTab>? Header { get; set; }
 
-        [ObservableProperty]
-        private BaseViewModel? _currentContentViewModel;
+    [ObservableProperty]
+    private BaseViewModel? _currentContentViewModel;
 
         public MaterialsViewModel(IMediator mediator, IDialogService dialogService, IViewModelFactory viewModelFactory,
             ICurrentUserService? currentUserService = null)
@@ -50,24 +45,24 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
                 CanDelete = rights?.CanDelete ?? true,
                 CanRefresh = true,
 
-                // Broadcast Actions to Children
-                AddCommand = new RelayCommand(() => SendAction("Add")),
-                EditCommand = new RelayCommand(() => SendAction("Edit")),
-                DeleteCommand = new RelayCommand(() => SendAction("Delete")),
-                RefreshCommand = new RelayCommand(() => SendAction("Refresh"))
-            };
+            // Broadcast Actions to Children
+            AddCommand = new RelayCommand(() => SendAction("Add")),
+            EditCommand = new RelayCommand(() => SendAction("Edit")),
+            DeleteCommand = new RelayCommand(() => SendAction("Delete")),
+            RefreshCommand = new RelayCommand(() => SendAction("Refresh"))
+        };
 
             // Add the 3 Tabs
             Header.Tabs.Add(MaterialsTab.MaterialGroup);
             Header.Tabs.Add(MaterialsTab.MaterialManagement);
             Header.Tabs.Add(MaterialsTab.FeedingPath);
 
-            Header.TabChangedRequested += OnTabChanged;
+        Header.TabChangedRequested += OnTabChanged;
 
-            // Load Default Tab
-            Header.SelectedTab = MaterialsTab.MaterialGroup;
-            await LoadTabContent(MaterialsTab.MaterialGroup);
-        }
+        // Load Default Tab
+        Header.SelectedTab = MaterialsTab.MaterialGroup;
+        await LoadTabContent(MaterialsTab.MaterialGroup);
+    }
 
         private async void OnTabChanged(MaterialsTab tab)
         {
@@ -90,12 +85,12 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
             await LoadTabContent(tab);
         }
 
-        private async Task LoadTabContent(MaterialsTab tab)
-        {
-            // 1. Cleanup Old Tab (Industrial Standard)
-            CurrentContentViewModel?.Cleanup();
+    private async Task LoadTabContent(MaterialsTab tab)
+    {
+        // 1. Cleanup Old Tab (Industrial Standard)
+        CurrentContentViewModel?.Cleanup();
 
-            BaseViewModel newVm = null;
+        BaseViewModel? newVm = null;
 
             switch (tab)
             {
@@ -112,14 +107,13 @@ namespace MES.Presentation.UI.Modules.Materials.ViewModel
                     break;
             }
 
-            if (newVm != null)
-            {
-                CurrentContentViewModel = newVm;
-                await newVm.InitializeAsync();
-            }
+        if (newVm != null)
+        {
+            CurrentContentViewModel = newVm;
+            await newVm.InitializeAsync();
         }
-
-        private void SendAction(string action) =>
-            WeakReferenceMessenger.Default.Send(new HeaderActionMessage(action));
     }
+
+    private void SendAction(string action) =>
+        WeakReferenceMessenger.Default.Send(new HeaderActionMessage(action));
 }

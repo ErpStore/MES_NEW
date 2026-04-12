@@ -1,9 +1,8 @@
-﻿<Window x:Class="MES.Presentation.UI.Shell.MainWindowView"
+﻿<Window x:Class="MES.Presentation.UI.Views.Shell"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MES.Presentation.UI.Shell"
         xmlns:controls="clr-namespace:MES.Presentation.UI.Controls"
         xmlns:controls1="clr-namespace:MES.Presentation.UI.Controls.SideMenuView"
         mc:Ignorable="d"
@@ -22,18 +21,18 @@
         <!-- MAIN AREA -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <!-- LEFT MENU -->
             <controls1:SideMenuView
                         Grid.Row="0"
                         Grid.Column="0"
-                        DataContext="{Binding SideMenu}" />
+                        DataContext="{Binding SideMenu}"
+                        Width="{Binding MenuWidth}"
+                />
             <!-- CONTENT -->
-            <local:ShellView
-                    Grid.Column="1"
-                    DataContext="{Binding Shell}" />
+            <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}" />
         </Grid>
     </Grid>
 </Window>
