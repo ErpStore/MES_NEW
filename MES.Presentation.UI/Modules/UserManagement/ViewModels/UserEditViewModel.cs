@@ -46,7 +46,7 @@ public partial class UserEditViewModel : BaseViewModel
 
     [ObservableProperty]
     [Required(ErrorMessage = "Please select a department")]
-    private string? _selectedDepartment;
+    private UserGroupDto? _selectedDepartment;
 
     [ObservableProperty]
     private bool _isActive;
@@ -56,8 +56,6 @@ public partial class UserEditViewModel : BaseViewModel
 
     [ObservableProperty]
     private DateTime? _passwordExpiryDate;
-
-    private int _selectedDepartmentId;
 
     // ==========================
     // PASSWORD PROPERTIES
@@ -87,7 +85,6 @@ public partial class UserEditViewModel : BaseViewModel
             EnablePasswordExpiry = false;
             PasswordExpiryDate = DateTime.Now.AddMonths(3); // Default
             SelectedDepartment = null;
-            _selectedDepartmentId = 0;
         }
         else
         {
@@ -107,8 +104,7 @@ public partial class UserEditViewModel : BaseViewModel
 
             if (user.UserGroupId.HasValue && Departments.Any(d => d.Id == user.UserGroupId.Value))
             {
-                SelectedDepartment = Departments.Where(d => d.Id == user.UserGroupId.Value).First().Name;
-                _selectedDepartmentId = user.UserGroupId.Value;
+                SelectedDepartment = Departments.First(d => d.Id == user.UserGroupId.Value);
             }
         }
 
@@ -174,7 +170,7 @@ public partial class UserEditViewModel : BaseViewModel
                 LastName = LastName,
                 Email = Email,
                 Mobile = Mobile,
-                UserGroupId = _selectedDepartmentId,
+                UserGroupId = SelectedDepartment?.Id ?? 0,
                 IsActive = IsActive,
                 EnablePasswordExpiry = EnablePasswordExpiry,
                 PasswordExpiryDate = PasswordExpiryDate,
