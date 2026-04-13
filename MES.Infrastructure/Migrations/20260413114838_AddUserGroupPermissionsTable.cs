@@ -10,12 +10,6 @@ namespace MES.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "UserGroupRights");
-
-            migrationBuilder.DropTable(
-                name: "UserRights");
-
             migrationBuilder.CreateTable(
                 name: "UserGroupPermissions",
                 columns: table => new

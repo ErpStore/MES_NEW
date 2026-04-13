@@ -209,7 +209,7 @@
                 BorderBrush="#DDDDDD"
                 BorderThickness="0,1,0,0"
                 Padding="8,6"
-                Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}">
+                >
             <Button Content="Save Rights"
                     Command="{Binding SaveCommand}"
                     HorizontalAlignment="Right"
