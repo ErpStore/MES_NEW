@@ -10,7 +10,7 @@
             <!-- User selector row (admin only) -->
             <RowDefinition Height="Auto"/>
             <!-- Column header row -->
-            <RowDefinition Height="38"/>
+            <RowDefinition Height="48"/>
             <!-- Rights tree -->
             <RowDefinition Height="*"/>
             <!-- Save button row (admin only) -->
@@ -52,37 +52,23 @@
 
         <!-- Column Headers -->
         <Border Grid.Row="1" Background="#001C3B">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="70"/>
-                </Grid.ColumnDefinitions>
+            <DockPanel LastChildFill="True">
 
-                <!-- Title label -->
-                <TextBlock Grid.Column="0"
-                           Text="Assignable Authorization"
-                           Foreground="White"
-                           FontWeight="SemiBold"
-                           FontSize="12"
-                           Margin="10,0,0,0"
-                           VerticalAlignment="Center"/>
-
-                <!-- ADD header -->
-                <Border Grid.Column="1"
+                <!-- DELETE header (dock right first → rightmost column) -->
+                <Border DockPanel.Dock="Right"
+                        Width="100"
                         BorderBrush="#1A3A5C"
                         BorderThickness="1,0,0,0">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Border Background="#2E7D32" CornerRadius="2"
-                                Padding="6,1" Margin="0,0,0,2"
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,4">
+                        <Border Background="#C62828" CornerRadius="3"
+                                Padding="8,2" Margin="0,0,0,3"
                                 HorizontalAlignment="Center">
-                            <TextBlock Text="ADD"
+                            <TextBlock Text="DELETE"
                                        Foreground="White"
                                        FontSize="9"
                                        FontWeight="Bold"/>
                         </Border>
-                        <TextBlock Text="Create records"
+                        <TextBlock Text="Remove records"
                                    Foreground="#AAAAAA"
                                    FontSize="8"
                                    HorizontalAlignment="Center"/>
@@ -90,12 +76,13 @@
                 </Border>
 
                 <!-- EDIT header -->
-                <Border Grid.Column="2"
+                <Border DockPanel.Dock="Right"
+                        Width="100"
                         BorderBrush="#1A3A5C"
                         BorderThickness="1,0,0,0">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Border Background="#1565C0" CornerRadius="2"
-                                Padding="6,1" Margin="0,0,0,2"
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,4">
+                        <Border Background="#1565C0" CornerRadius="3"
+                                Padding="8,2" Margin="0,0,0,3"
                                 HorizontalAlignment="Center">
                             <TextBlock Text="EDIT"
                                        Foreground="White"
@@ -109,26 +96,35 @@
                     </StackPanel>
                 </Border>
 
-                <!-- DELETE header -->
-                <Border Grid.Column="3"
+                <!-- ADD header -->
+                <Border DockPanel.Dock="Right"
+                        Width="100"
                         BorderBrush="#1A3A5C"
                         BorderThickness="1,0,0,0">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Border Background="#C62828" CornerRadius="2"
-                                Padding="6,1" Margin="0,0,0,2"
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,4">
+                        <Border Background="#2E7D32" CornerRadius="3"
+                                Padding="8,2" Margin="0,0,0,3"
                                 HorizontalAlignment="Center">
-                            <TextBlock Text="DELETE"
+                            <TextBlock Text="ADD"
                                        Foreground="White"
                                        FontSize="9"
                                        FontWeight="Bold"/>
                         </Border>
-                        <TextBlock Text="Remove records"
+                        <TextBlock Text="Create records"
                                    Foreground="#AAAAAA"
                                    FontSize="8"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
-            </Grid>
+
+                <!-- Title label -->
+                <TextBlock Text="Assignable Authorization"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           FontSize="12"
+                           Margin="12,0,0,0"
+                           VerticalAlignment="Center"/>
+            </DockPanel>
         </Border>
 
         <!-- Rights Tree -->
@@ -145,61 +141,63 @@
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsExpanded" Value="True"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="Padding" Value="2,3"/>
+                        <Setter Property="Padding" Value="2,0"/>
+                        <Setter Property="BorderThickness" Value="0"/>
                     </Style>
                 </TreeView.Resources>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <Grid MinHeight="24">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
+                        <DockPanel MinHeight="28" LastChildFill="True">
 
-                            <TextBlock Grid.Column="0"
-                                       Text="{Binding DisplayName}"
-                                       FontSize="11"
-                                       VerticalAlignment="Center"
-                                       TextTrimming="CharacterEllipsis"/>
-
-                            <!-- ADD checkbox -->
-                            <Border Grid.Column="1"
-                                    BorderBrush="#EEEEEE"
+                            <!-- DELETE checkbox (dock right first → rightmost) -->
+                            <Border DockPanel.Dock="Right"
+                                    Width="100"
+                                    BorderBrush="#E0E0E0"
                                     BorderThickness="1,0,0,0"
-                                    Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}">
-                                <CheckBox IsChecked="{Binding CanAdd, Mode=TwoWay}"
-                                          IsEnabled="{Binding DataContext.IsAdmin,
-                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                            </Border>
-
-                            <!-- EDIT checkbox -->
-                            <Border Grid.Column="2"
-                                    BorderBrush="#EEEEEE"
-                                    BorderThickness="1,0,0,0"
-                                    Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}">
-                                <CheckBox IsChecked="{Binding CanEdit, Mode=TwoWay}"
-                                          IsEnabled="{Binding DataContext.IsAdmin,
-                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                            </Border>
-
-                            <!-- DELETE checkbox -->
-                            <Border Grid.Column="3"
-                                    BorderBrush="#EEEEEE"
-                                    BorderThickness="1,0,0,0"
-                                    Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}">
+                                    Background="Transparent">
                                 <CheckBox IsChecked="{Binding CanDelete, Mode=TwoWay}"
                                           IsEnabled="{Binding DataContext.IsAdmin,
                                               RelativeSource={RelativeSource AncestorType=UserControl}}"
                                           HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center"
+                                          Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
                             </Border>
-                        </Grid>
+
+                            <!-- EDIT checkbox -->
+                            <Border DockPanel.Dock="Right"
+                                    Width="100"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1,0,0,0"
+                                    Background="Transparent">
+                                <CheckBox IsChecked="{Binding CanEdit, Mode=TwoWay}"
+                                          IsEnabled="{Binding DataContext.IsAdmin,
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
+                            </Border>
+
+                            <!-- ADD checkbox -->
+                            <Border DockPanel.Dock="Right"
+                                    Width="100"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1,0,0,0"
+                                    Background="Transparent">
+                                <CheckBox IsChecked="{Binding CanAdd, Mode=TwoWay}"
+                                          IsEnabled="{Binding DataContext.IsAdmin,
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Visibility="{Binding IsLeaf, Converter={StaticResource BoolToVisibility}}"/>
+                            </Border>
+
+                            <!-- Node name (fills remaining space) -->
+                            <TextBlock Text="{Binding DisplayName}"
+                                       FontSize="11"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       Margin="2,0,6,0"/>
+                        </DockPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
