@@ -83,6 +83,7 @@
                 </TextBlock>
                 <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Departments}" 
                           SelectedItem="{Binding SelectedDepartment, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                          DisplayMemberPath="Name"
                           Style="{StaticResource PopUpComboBoxStyle}"/>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" Text="Email"
