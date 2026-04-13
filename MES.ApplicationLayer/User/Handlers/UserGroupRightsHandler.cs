@@ -21,7 +21,7 @@ namespace MES.ApplicationLayer.User.Handlers
 
         public async Task<List<UserGroupRightDto>> Handle(GetUserGroupRightsQuery request, CancellationToken cancellationToken)
         {
-            return await _context.UserGroupRights
+            return await _context.UserGroupPermissions
                 .AsNoTracking()
                 .Where(r => r.UserGroupId == request.UserGroupId)
                 .Select(r => new UserGroupRightDto
@@ -53,13 +53,13 @@ namespace MES.ApplicationLayer.User.Handlers
         {
             try
             {
-                var existing = await _context.UserGroupRights
+                var existing = await _context.UserGroupPermissions
                     .Where(r => r.UserGroupId == request.UserGroupId)
                     .ToListAsync(cancellationToken);
 
-                _context.UserGroupRights.RemoveRange(existing);
+                _context.UserGroupPermissions.RemoveRange(existing);
 
-                var newRights = request.Rights.Select(dto => new UserGroupRight
+                var newRights = request.Rights.Select(dto => new UserGroupPermission
                 {
                     UserGroupId = request.UserGroupId,
                     ScreenKey = dto.ScreenKey,
@@ -68,10 +68,10 @@ namespace MES.ApplicationLayer.User.Handlers
                     CanDelete = dto.CanDelete
                 }).ToList();
 
-                await _context.UserGroupRights.AddRangeAsync(newRights, cancellationToken);
+                await _context.UserGroupPermissions.AddRangeAsync(newRights, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
 
-                _logger?.LogInformation("Saved {Count} rights for UserGroupId {Id}", newRights.Count, request.UserGroupId);
+            
                 return true;
             }
             catch (Exception ex)

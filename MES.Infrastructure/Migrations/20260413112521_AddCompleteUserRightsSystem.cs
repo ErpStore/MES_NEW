@@ -5,7 +5,7 @@
 namespace MES.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUserRightsTable : Migration
+    public partial class AddCompleteUserRightsSystem : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

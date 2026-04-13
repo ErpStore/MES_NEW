@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MES.Infrastructure.Migrations
 {
     [DbContext(typeof(MesDbContext))]
-    [Migration("20260412131533_AddUserRightsTable")]
-    partial class AddUserRightsTable
+    [Migration("20260413114838_AddUserGroupPermissionsTable")]
+    partial class AddUserGroupPermissionsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -371,7 +371,7 @@ namespace MES.Infrastructure.Migrations
                     b.ToTable("UserGroups");
                 });
 
-            modelBuilder.Entity("MES.Domain.Entities.UserGroupRight", b =>
+            modelBuilder.Entity("MES.Domain.Entities.UserGroupPermission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -386,6 +386,9 @@ namespace MES.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("CanEdit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVisibleForUser")
                         .HasColumnType("bit");
 
                     b.Property<string>("ScreenKey")
@@ -400,39 +403,7 @@ namespace MES.Infrastructure.Migrations
 
                     b.HasIndex("UserGroupId");
 
-                    b.ToTable("UserGroupRights");
-                });
-
-            modelBuilder.Entity("MES.Domain.Entities.UserRight", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("CanAdd")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("CanDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("CanEdit")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ScreenKey")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRights");
+                    b.ToTable("UserGroupPermissions");
                 });
 
             modelBuilder.Entity("MES.Domain.Entities.Materials.FeedingPath", b =>
@@ -496,7 +467,7 @@ namespace MES.Infrastructure.Migrations
                     b.Navigation("UserGroup");
                 });
 
-            modelBuilder.Entity("MES.Domain.Entities.UserGroupRight", b =>
+            modelBuilder.Entity("MES.Domain.Entities.UserGroupPermission", b =>
                 {
                     b.HasOne("MES.Domain.Entities.UserGroup", "UserGroup")
                         .WithMany()
@@ -505,17 +476,6 @@ namespace MES.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("UserGroup");
-                });
-
-            modelBuilder.Entity("MES.Domain.Entities.UserRight", b =>
-                {
-                    b.HasOne("MES.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MES.Domain.Entities.Materials.MaterialGroup", b =>

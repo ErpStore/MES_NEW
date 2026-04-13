@@ -21,13 +21,13 @@ namespace MES.ApplicationLayer.User.Handlers
 
         public async Task<List<UserRightDto>> Handle(GetUserRightsQuery request, CancellationToken cancellationToken)
         {
-            return await _context.UserRights
+            return await _context.UserGroupPermissions
                 .AsNoTracking()
-                .Where(r => r.UserId == request.UserId)
+                .Where(r => r.UserGroupId == request.UserId)
                 .Select(r => new UserRightDto
                 {
                     Id = r.Id,
-                    UserId = r.UserId,
+                    UserId = r.UserGroupId,
                     ScreenKey = r.ScreenKey,
                     CanAdd = r.CanAdd,
                     CanEdit = r.CanEdit,
@@ -53,22 +53,22 @@ namespace MES.ApplicationLayer.User.Handlers
         {
             try
             {
-                var existing = await _context.UserRights
-                    .Where(r => r.UserId == request.UserId)
+                var existing = await _context.UserGroupPermissions
+                    .Where(r => r.UserGroupId == request.UserId)
                     .ToListAsync(cancellationToken);
 
-                _context.UserRights.RemoveRange(existing);
+                _context.UserGroupPermissions.RemoveRange(existing);
 
-                var newRights = request.Rights.Select(dto => new UserRight
+                var newRights = request.Rights.Select(dto => new UserGroupPermission
                 {
-                    UserId = request.UserId,
+                    UserGroupId = request.UserId,
                     ScreenKey = dto.ScreenKey,
                     CanAdd = dto.CanAdd,
                     CanEdit = dto.CanEdit,
                     CanDelete = dto.CanDelete
                 }).ToList();
 
-                await _context.UserRights.AddRangeAsync(newRights, cancellationToken);
+                await _context.UserGroupPermissions.AddRangeAsync(newRights, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
 
                 _logger?.LogInformation("Saved {Count} rights for UserId {Id}", newRights.Count, request.UserId);

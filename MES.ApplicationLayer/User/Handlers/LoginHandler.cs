@@ -56,7 +56,7 @@ namespace MES.ApplicationLayer.User.Handlers
 
                 if (user.UserGroupId.HasValue)
                 {
-                    rights = await _context.UserGroupRights
+                    rights = await _context.UserGroupPermissions
                         .AsNoTracking()
                         .Where(r => r.UserGroupId == user.UserGroupId.Value)
                         .Select(r => new UserGroupRightDto

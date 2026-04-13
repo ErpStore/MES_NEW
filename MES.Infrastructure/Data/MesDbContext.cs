@@ -13,10 +13,6 @@ public class MesDbContext : DbContext
 
     public DbSet<UserGroup> UserGroups { get; set; } // Add this
 
-    public DbSet<UserGroupRight> UserGroupRights { get; set; }
-
-    public DbSet<UserRight> UserRights { get; set; }
-
     public DbSet<MaterialGroup> MaterialGroups { get; set; }
 
     public DbSet<Material> Materials { get; set; }
@@ -27,6 +23,8 @@ public class MesDbContext : DbContext
     public DbSet<RecipeItem> RecipeItems { get; set; }
 
     public DbSet<ProductionOrder> ProductionOrder { get; set; }
+
+    public DbSet<UserGroupPermission> UserGroupPermissions { get; set; }
 
     public MesDbContext(DbContextOptions<MesDbContext> options) : base(options)
     {
